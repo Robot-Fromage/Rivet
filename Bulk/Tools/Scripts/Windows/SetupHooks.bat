@@ -1,0 +1,1 @@
+git config core.hooksPath Bulk/Tools/Scripts/Hooks/
