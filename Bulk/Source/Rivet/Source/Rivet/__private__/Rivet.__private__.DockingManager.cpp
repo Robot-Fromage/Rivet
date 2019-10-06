@@ -185,6 +185,7 @@ cDockingManager::TabLifted( Tab* iTab )
 
     // Make it Indie
     iTab->setParent(0);
+    iTab->setWindowFlags( Qt::FramelessWindowHint | Qt::SubWindow );
     iTab->show();
     iTab->raise();
 }

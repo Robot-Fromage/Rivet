@@ -16,7 +16,6 @@
 #include <QRegion>
 #include <QVector>
 
-
 #include <functional>
 
 
@@ -101,7 +100,6 @@ private:
     Tab*                            mCurrentDraggingTab;
     TabArea*                        mCurrentTargetArea;
     TabArea*                        mLastLiftedFrom;
-
 };
 
 

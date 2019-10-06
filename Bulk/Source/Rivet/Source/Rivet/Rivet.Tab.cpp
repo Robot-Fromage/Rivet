@@ -714,7 +714,7 @@ void
 Tab::Build()
 {
     // Setup tab attributes
-    setWindowFlag( Qt::FramelessWindowHint );
+    setWindowFlags( Qt::FramelessWindowHint | Qt::SubWindow );
     setAttribute( Qt::WA_TranslucentBackground );
     setAttribute( Qt::WA_DeleteOnClose );
 

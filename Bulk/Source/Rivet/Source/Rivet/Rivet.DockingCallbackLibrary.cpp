@@ -48,7 +48,7 @@ OnTabDroppedOutCB_Open( Tab* iTab, TabArea* iSrc )
 
     w->SetOnAreaBecomesEmptyCB( OnAreaBecomesEmptyCB_CloseTopLevel );
     w->SetOnTabDroppedOutCB( OnTabDroppedOutCB_RevertBack );
-    
+
     w->setAttribute( Qt::WA_DeleteOnClose );
     w->resize( 800, 30 );
     w->move(iTab->pos());
