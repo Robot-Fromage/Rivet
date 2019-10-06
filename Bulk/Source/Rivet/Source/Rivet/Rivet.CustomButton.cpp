@@ -383,8 +383,8 @@ CustomButton::paintEvent( QPaintEvent* event )
         case eShape::kMaximize :
         {
             painter.drawLine( refPointA, refPointB );
-            painter.drawLine( refPointB, refPointC );
-            painter.drawLine( refPointC, refPointD );
+            painter.drawLine( refPointB, refPointC + QPoint( +1, +1 ) );
+            painter.drawLine( refPointC + QPoint( +1, +1 ), refPointD );
             painter.drawLine( refPointD, refPointA );
             break;
         }
