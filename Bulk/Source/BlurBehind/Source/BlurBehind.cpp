@@ -28,7 +28,7 @@ int  main( int argc, char *argv[] )
     w->SetCenterWidget( m );
     w->resize( 800, 600 );
     w->show();
-    //w->EnableBlurBehind();
+    w->EnableBlurBehind();
 
     return  app.exec();
 }
