@@ -5,7 +5,7 @@
 *
 * @file     Rivet.CustomMainWindow.cpp
 * @author   Clement Berthaud
-* @brief    This file profides the definition for the RCustomWindow class.
+* @brief    This file provides the definition for the RCustomWindow class.
 */
 #include "Rivet/Rivet.CustomMainWindow.h"
 

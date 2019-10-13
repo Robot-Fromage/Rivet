@@ -1,32 +1,18 @@
-/*************************************************************************
+/**
 *
 *   Rivet
 *__________________
 *
-* Rivet.__private__.WinExtras.h
-* 9-9-2018 12:10 GMT+1
-* Clement Berthaud - Layl
-* Please refer to LICENSE.TXT
+* @file     Rivet.__private__.GeometryUtils.h
+* @author   Clement Berthaud
+* @brief    This file provides the declarations for some Win32 utilities.
 */
-
 #pragma once
-
-
-// Fix conflict beetween Win32 & Qt Macros
-#ifndef NOMINMAX
 #define NOMINMAX
-#endif // ! NOMINMAX
-
-
 #include <windows.h>
 
-
-namespace  Rivet
-{
-namespace  __private__
-{
-
-
+namespace  Rivet {
+namespace  __private__ {
 // Utility Enum for Windows Versions
 enum  eWindowsVersion
 {

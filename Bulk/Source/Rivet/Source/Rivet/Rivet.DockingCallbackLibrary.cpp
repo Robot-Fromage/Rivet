@@ -1,26 +1,20 @@
-/*************************************************************************
+/**
 *
 *   Rivet
 *__________________
 *
-* Rivet.DockingCallbackLibrary.cpp
-* 22-9-2018 16:02 GMT+1
-* Clement Berthaud - Layl
-* Please refer to LICENSE.TXT
+* @file     Rivet.DockingCallbackLibrary.h
+* @author   Clement Berthaud
+* @brief    This file provides the definitions for the Docking callbacks functions.
 */
-
 #include "Rivet/Rivet.DockingCallbackLibrary.h"
-
-
 #include "Rivet/Rivet.TabArea.h"
 
-
-namespace  Rivet
-{
+namespace  Rivet {
 
 
 void
-OnAreaBecomesEmptyCB_CloseTopLevel( TabArea* iArea )
+OnAreaBecomesEmptyCB_CloseTopLevel( RTabArea* iArea )
 {
     auto tw = iArea->topLevelWidget();
     tw->close();
@@ -29,22 +23,22 @@ OnAreaBecomesEmptyCB_CloseTopLevel( TabArea* iArea )
 
 
 void
-OnAreaBecomesEmptyCB_DoNothing( TabArea* iArea )
+OnAreaBecomesEmptyCB_DoNothing( RTabArea* iArea )
 {
 }
 
 
 void
-OnTabDroppedOutCB_RevertBack( Tab* iTab, TabArea* iSrc )
+OnTabDroppedOutCB_RevertBack( RTab* iTab, RTabArea* iSrc )
 {
     iSrc->DockHere( iTab );
 }
 
 
 void
-OnTabDroppedOutCB_Open( Tab* iTab, TabArea* iSrc )
+OnTabDroppedOutCB_Open( RTab* iTab, RTabArea* iSrc )
 {
-    auto  w = new  TabArea();
+    auto  w = new  RTabArea();
 
     w->SetOnAreaBecomesEmptyCB( OnAreaBecomesEmptyCB_CloseTopLevel );
     w->SetOnTabDroppedOutCB( OnTabDroppedOutCB_RevertBack );

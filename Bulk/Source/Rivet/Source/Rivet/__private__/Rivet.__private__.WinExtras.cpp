@@ -1,30 +1,19 @@
-/*************************************************************************
+/**
 *
 *   Rivet
 *__________________
 *
-* Rivet.__private__.WinExtras.cpp
-*
-* Clement Berthaud - Layl
-* Please refer to LICENSE.TXT
+* @file     Rivet.__private__.GeometryUtils.h
+* @author   Clement Berthaud
+* @brief    This file provides the definitions for some Win32 utilities.
 */
-
 #include "Rivet/__private__/Rivet.__private__.WinExtras.h"
-
-
 #include <cstdlib>
 #include <assert.h>
-
-// Windows SDK versions functions
 #include <VersionHelpers.h>
 
-
-namespace  Rivet
-{
-namespace  __private__
-{
-
-
+namespace  Rivet {
+namespace  __private__ {
 // Mirror Enums & Structs for accessing non-documented windows API
 typedef enum {
     ACCENT_DISABLED = 0,

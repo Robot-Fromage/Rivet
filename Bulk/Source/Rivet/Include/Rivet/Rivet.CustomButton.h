@@ -5,7 +5,7 @@
 *
 * @file     Rivet.CustomButton.h
 * @author   Clement Berthaud
-* @brief    This file profides the declaration for the RCustomButton class.
+* @brief    This file provides the declaration for the RCustomButton class.
 */
 #pragma once
 #include <QObject>

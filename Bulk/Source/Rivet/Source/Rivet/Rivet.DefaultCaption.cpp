@@ -5,7 +5,7 @@
 *
 * @file     Rivet.DefaultCaption.cpp
 * @author   Clement Berthaud
-* @brief    This file profides the definition for the RDefaultCaption class.
+* @brief    This file provides the definition for the RDefaultCaption class.
 */
 #include "Rivet/Rivet.DefaultCaption.h"
 #include <QPainter>

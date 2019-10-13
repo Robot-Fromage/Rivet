@@ -5,7 +5,7 @@
 *
 * @file     Rivet.CustomButton.cpp
 * @author   Clement Berthaud
-* @brief    This file profides the definition for the RCustomButton class.
+* @brief    This file provides the definition for the RCustomButton class.
 */
 #include "Rivet/Rivet.CustomButton.h"
 #include <QPainter>

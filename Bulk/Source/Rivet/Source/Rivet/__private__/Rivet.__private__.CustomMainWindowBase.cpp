@@ -5,7 +5,7 @@
 *
 * @file     Rivet.__private__.CustomMainWindowBase.cpp
 * @author   Clement Berthaud
-* @brief    This file profides the definition for the RCustomMainWindowBase class.
+* @brief    This file provides the definition for the RCustomMainWindowBase class.
 */
 #include "Rivet/__private__/Rivet.__private__.CustomMainWindowBase.h"
 #include <QApplication>

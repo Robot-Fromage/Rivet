@@ -30,8 +30,6 @@
 
 //--------------------------------------------------------------------------------------
 //--------------------------------------------------------------- Default values defines
-
-
 #define  DEFAULT_TAB_STYLE                  eTabShape::kBezier
 #define  DEFAULT_BASE_COLOR                 QColor( 53, 53, 53, 255 )
 #define  DEFAULT_FADE_COLOR                 QColor( 45, 45, 45, 127 )
@@ -43,18 +41,13 @@
 #define  DEFAULT_TAB_ANIMATION_DURATION     100
 
 
-namespace  Rivet
-{
-
-
+namespace  Rivet {
 ////////////////////////////////////////////////////////////////////////////////////////
 ////                                PUBLIC API                                      ////
 ////////////////////////////////////////////////////////////////////////////////////////
 //--------------------------------------------------------------------------------------
 //----------------------------------------------------------- Construction / Destruction
-
-
-Tab::~Tab()
+RTab::~RTab()
 {
     StopAnimatedMovement();
     Unregister();
@@ -62,40 +55,33 @@ Tab::~Tab()
 }
 
 
-Tab::Tab( QWidget* parent ) :
-    tSuperClass( parent ),
-    mTitleLabel(                    NULL ),
-    mCloseButton(                   NULL ),
-    mInvisibleBackgroundRect(       NULL ),
-
-    mTitleText(                     DEFAULT_TITLE_TEXT ),
-
-    mDragShift(                     QPoint() ),
-    mDragging(                      false ),
-    mDragEnabled(                   false ),
-
-    mAnimation(                     NULL ),
-    mAnimationTargetGeometry(       QRect() ),
-
-    mTabStyle(                      DEFAULT_TAB_STYLE ),
-    mBaseColor(                     DEFAULT_BASE_COLOR ),
-    mFadeColor(                     DEFAULT_FADE_COLOR ),
-    mSlopePadding(                  DEFAULT_SLOPE_PADDING ),
-    mTitleDropShadowEffect(         NULL ),
-    mGlobalDropShadowEffect(        NULL ),
-    mTextColor(                     DEFAULT_TEXT_COLOR ),
-    mTitleDropShadowColor(          DEFAULT_DROP_SHADOW_COLOR ),
-
-    mHovered(                       false ),
-    mPressed(                       false ),
-    mActive(                        false ),
-
-    mLiftable( true ),
-    mClosable( true ),
-    mTag( "" ),
-
-    mOnTabDroppedOutCB( NULL ),
-    mLinkWidget( NULL )
+RTab::RTab( QWidget* iParent )
+    : tSuperClass( iParent )
+    , mTitleLabel(              nullptr                     )
+    , mCloseButton(             nullptr                     )
+    , mInvisibleBackgroundRect( nullptr                     )
+    , mTitleText(               DEFAULT_TITLE_TEXT          )
+    , mDragShift(               QPoint()                    )
+    , mDragging(                false                       )
+    , mDragEnabled(             false                       )
+    , mAnimation(               nullptr                     )
+    , mAnimationTargetGeometry( QRect()                     )
+    , mTabShape(                DEFAULT_TAB_STYLE           )
+    , mBaseColor(               DEFAULT_BASE_COLOR          )
+    , mFadeColor(               DEFAULT_FADE_COLOR          )
+    , mSlopePadding(            DEFAULT_SLOPE_PADDING       )
+    , mTitleDropShadowEffect(   nullptr                     )
+    , mGlobalDropShadowEffect(  nullptr                     )
+    , mTextColor(               DEFAULT_TEXT_COLOR          )
+    , mTitleDropShadowColor(    DEFAULT_DROP_SHADOW_COLOR   )
+    , mHovered(                 false                       )
+    , mPressed(                 false                       )
+    , mActive(                  false                       )
+    , mLiftable(                true                        )
+    , mClosable(                true                        )
+    , mTag(                     "*"                         )
+    , mOnTabDroppedOutCB(       nullptr                     )
+    , mLinkWidget(              nullptr                     )
 {
     Init();
     Build();
@@ -106,32 +92,30 @@ Tab::Tab( QWidget* parent ) :
 
 //--------------------------------------------------------------------------------------
 //---------------------------------------------------------- Docking Interface Accessors
-
-
 bool
-Tab::Docked()  const
+RTab::Docked()  const
 {
-    // If undocked, that means top level, hence parentWidget is NULL
-    return  bool( parentWidget() );
+    // If undocked, that means top level, hence parentWidget is nullptr
+    return  parentWidget() != nullptr;
 }
 
 
 bool
-Tab::Dragging()  const
+RTab::Dragging()  const
 {
     return  mDragging;
 }
 
 
 const  QPoint&
-Tab::DragShift()  const
+RTab::DragShift()  const
 {
     return  mDragShift;
 }
 
 
 void
-Tab::FinishDrag()
+RTab::FinishDrag()
 {
     // Forbid call if not actually dragging
     if( !mDragging )
@@ -157,10 +141,8 @@ Tab::FinishDrag()
 
 //--------------------------------------------------------------------------------------
 //------------------------------------------------------------------ Animation Interface
-
-
 void
-Tab::SetAnimatedMovement( const  QPoint& iDest )
+RTab::SetAnimatedMovement( const  QPoint& iDest )
 {
     StopAnimatedMovement();
 
@@ -181,7 +163,7 @@ Tab::SetAnimatedMovement( const  QPoint& iDest )
 
 
 void
-Tab::StopAnimatedMovement()
+RTab::StopAnimatedMovement()
 {
     mAnimationTargetGeometry = geometry();
 
@@ -195,7 +177,7 @@ Tab::StopAnimatedMovement()
 
 
 const  QRect&
-Tab::TargetGeometry()  const
+RTab::TargetGeometry()  const
 {
     return  mAnimationTargetGeometry;
 }
@@ -203,10 +185,8 @@ Tab::TargetGeometry()  const
 
 //--------------------------------------------------------------------------------------
 //--------------------------------------------------- Tab ColorStyle Interface Accessors
-
-
 void
-Tab::SetTitle( const  QString&  iTitle )
+RTab::SetTitle( const  QString&  iTitle )
 {
     // Set Text to member
     mTitleText = iTitle;
@@ -220,15 +200,15 @@ Tab::SetTitle( const  QString&  iTitle )
 
 
 void
-Tab::SetTabShape( eTabShape iTabStyle )
+RTab::SetTabShape( eTabShape iTabStyle )
 {
-    mTabStyle = iTabStyle;
+    mTabShape = iTabStyle;
     repaint();
 }
 
 
 void
-Tab::SetColor( const  QColor&  iColor )
+RTab::SetColor( const  QColor&  iColor )
 {
     mBaseColor = iColor;
 
@@ -263,44 +243,43 @@ Tab::SetColor( const  QColor&  iColor )
 }
 
 
-
 QString
-Tab::GetTitle()  const
+RTab::GetTitle()  const
 {
     return  mTitleText;
 }
 
 
 QString
-Tab::GetTitleEllided()  const
+RTab::GetTitleEllided()  const
 {
     return  mTitleLabel->text();
 }
 
 
-Tab::eTabShape
-Tab::GetTabStyle()  const
+RTab::eTabShape
+RTab::GetTabShape()  const
 {
-    return  mTabStyle;
+    return  mTabShape;
 }
 
 
 const  QColor&
-Tab::GetColor()  const
+RTab::GetColor()  const
 {
     return mBaseColor;
 }
 
 
 void
-Tab::SetFadeColor( const  QColor& iColor )
+RTab::SetFadeColor( const  QColor& iColor )
 {
     mFadeColor = iColor;
 }
 
 
 const  QColor&
-Tab::GetFadeColor()  const
+RTab::GetFadeColor()  const
 {
     return  mFadeColor;
 }
@@ -308,10 +287,8 @@ Tab::GetFadeColor()  const
 
 //--------------------------------------------------------------------------------------
 //------------------------------------------------------------------ Tab State accessors
-
-
 void
-Tab::SetActive( bool iValue )
+RTab::SetActive( bool iValue )
 {
     mActive = iValue;
     mPressed = false;
@@ -339,21 +316,21 @@ Tab::SetActive( bool iValue )
 
 
 bool
-Tab::IsHovered()  const
+RTab::IsHovered()  const
 {
     return  mHovered;
 }
 
 
 bool
-Tab::IsPressed()  const
+RTab::IsPressed()  const
 {
     return  mPressed;
 }
 
 
 bool
-Tab::IsActive()  const
+RTab::IsActive()  const
 {
     return  mActive;
 }
@@ -361,17 +338,15 @@ Tab::IsActive()  const
 
 //--------------------------------------------------------------------------------------
 //---------------------------------------------------------------- Behaviour constraints
-
-
 void
-Tab::SetLiftable( bool iValue )
+RTab::SetLiftable( bool iValue )
 {
     mLiftable = iValue;
 }
 
 
 void
-Tab::SetClosable( bool iValue )
+RTab::SetClosable( bool iValue )
 {
     mClosable = iValue;
     mCloseButton->setVisible( mClosable );
@@ -379,14 +354,14 @@ Tab::SetClosable( bool iValue )
 
 
 bool
-Tab::IsLiftable()  const
+RTab::IsLiftable()  const
 {
     return  mLiftable;
 }
 
 
 bool
-Tab::IsClosable()  const
+RTab::IsClosable()  const
 {
     return  mClosable;
 }
@@ -394,52 +369,47 @@ Tab::IsClosable()  const
 
 //--------------------------------------------------------------------------------------
 //--------------------------------------------------------------------- ID tag Interface
-
-
 void
-Tab::SetTag( const  QString&  iTag )
+RTab::SetTag( const  QString&  iTag )
 {
     mTag = iTag;
 }
 
 
 const  QString&
-Tab::GetTag()  const
+RTab::GetTag()  const
 {
     return  mTag;
 }
 
 
 //--------------------------------------------------------------------------------------
-//------------------------------------------------------------------------------- CB API
-
-
+//------------------------------------------------------------------------- Callback API
 void
-Tab::SetOnTabDroppedOutCB( OnTabDroppedOutCB iOnTabDroppedOutCB )
+RTab::SetOnTabDroppedOutCB( OnTabDroppedOutCB iOnTabDroppedOutCB )
 {
     mOnTabDroppedOutCB = iOnTabDroppedOutCB;
 }
 
 
 OnTabDroppedOutCB
-Tab::GetOnTabDroppedOutCB()  const
+RTab::GetOnTabDroppedOutCB()  const
 {
     return  mOnTabDroppedOutCB;
 }
 
+
 //--------------------------------------------------------------------------------------
-//----------------------------------------------------------------------------- Link API
-
-
+//---------------------------------------------------------------------- Link widget API
 void
-Tab::SetLinkWidget( QWidget* iWidget )
+RTab::SetLinkWidget( QWidget* iWidget )
 {
     mLinkWidget = iWidget;
 }
 
 
 QWidget*
-Tab::GetLinkWidget()  const
+RTab::GetLinkWidget()  const
 {
     return  mLinkWidget;
 }
@@ -450,10 +420,8 @@ Tab::GetLinkWidget()  const
 ////////////////////////////////////////////////////////////////////////////////////////
 //--------------------------------------------------------------------------------------
 //------------------------------------------------------------------ Qt Events overrides
-
-
 void
-Tab::resizeEvent( QResizeEvent *event )
+RTab::resizeEvent( QResizeEvent *event )
 {
     // Triggered on resize, most likely while inside a tab area, upon reorder.
     tSuperClass::resizeEvent(event);
@@ -465,7 +433,7 @@ Tab::resizeEvent( QResizeEvent *event )
 
 
 void
-Tab::enterEvent( QEvent* event )
+RTab::enterEvent( QEvent* event )
 {
     tSuperClass::enterEvent( event );
 
@@ -475,7 +443,7 @@ Tab::enterEvent( QEvent* event )
 
 
 void
-Tab::leaveEvent( QEvent* event )
+RTab::leaveEvent( QEvent* event )
 {
     tSuperClass::leaveEvent( event );
 
@@ -485,7 +453,7 @@ Tab::leaveEvent( QEvent* event )
 
 
 void
-Tab::mousePressEvent( QMouseEvent* event )
+RTab::mousePressEvent( QMouseEvent* event )
 {
     // Mouse press triggered when inside tabArea
     // We enable only if left click
@@ -514,7 +482,7 @@ Tab::mousePressEvent( QMouseEvent* event )
 
 
 void
-Tab::mouseMoveEvent( QMouseEvent* event )
+RTab::mouseMoveEvent( QMouseEvent* event )
 {
     // Moving while pressed & dragging tab when docked
     int threshold = 5;
@@ -548,7 +516,7 @@ Tab::mouseMoveEvent( QMouseEvent* event )
 
 
 void
-Tab::mouseReleaseEvent( QMouseEvent* event )
+RTab::mouseReleaseEvent( QMouseEvent* event )
 {
     // Trigger finish drag on release
     FinishDrag();
@@ -558,7 +526,7 @@ Tab::mouseReleaseEvent( QMouseEvent* event )
 
 
 void
-Tab::paintEvent( QPaintEvent* event )
+RTab::paintEvent( QPaintEvent* event )
 {
     QPainter painter(this);
 
@@ -611,7 +579,7 @@ Tab::paintEvent( QPaintEvent* event )
 
     if( Docked() )
     {
-        switch( mTabStyle )
+        switch( mTabShape )
         {
             case  eTabShape::kLine:
             {
@@ -690,7 +658,7 @@ Tab::paintEvent( QPaintEvent* event )
 
 
 void
-Tab::closeEvent( QCloseEvent* event )
+RTab::closeEvent( QCloseEvent* event )
 {
     if( mLinkWidget )
         mLinkWidget->close();
@@ -699,10 +667,8 @@ Tab::closeEvent( QCloseEvent* event )
 
 //--------------------------------------------------------------------------------------
 //----------------------------------------------------- Private GUI Processing Functions
-
-
 void
-Tab::Init()
+RTab::Init()
 {
     if( !mInvisibleBackgroundRect )     mInvisibleBackgroundRect    = new QWidget( this );
     if( !mTitleLabel )                  mTitleLabel                 = new QLabel( this );
@@ -711,7 +677,7 @@ Tab::Init()
 
 
 void
-Tab::Build()
+RTab::Build()
 {
     // Setup tab attributes
     setWindowFlags( Qt::FramelessWindowHint | Qt::SubWindow );
@@ -759,7 +725,7 @@ Tab::Build()
 
 
 void
-Tab::Compose()
+RTab::Compose()
 {
     // Composition of the internal geometry
 
@@ -772,8 +738,8 @@ Tab::Compose()
 
     // Computing different positions according to the current tab style.
     int shift = 1;
-            if( mTabStyle == eTabShape::kLine )      shift = 3;
-    else    if( mTabStyle == eTabShape::kBezier )    shift = 4;
+            if( mTabShape == eTabShape::kLine )      shift = 3;
+    else    if( mTabShape == eTabShape::kBezier )    shift = 4;
 
     btnPosition.setX( btnPosition.x() - buttonPadding * shift );
 
@@ -789,8 +755,9 @@ Tab::Compose()
 
 
 void
-Tab::Destroy()
+RTab::Destroy()
 {
+    // The order matters
     delete  mTitleDropShadowEffect;
     delete  mGlobalDropShadowEffect;
     delete  mOpacityEffect;
@@ -798,21 +765,22 @@ Tab::Destroy()
     delete  mCloseButton;
     delete  mInvisibleBackgroundRect;
 
-    mTitleLabel                 = 0;
-    mCloseButton                = 0;
-    mInvisibleBackgroundRect    = 0;
-    mTitleDropShadowEffect      = 0;
-    mGlobalDropShadowEffect     = 0;
-    mOpacityEffect              = 0;
+    mTitleLabel                 = nullptr;
+    mCloseButton                = nullptr;
+    mInvisibleBackgroundRect    = nullptr;
+    mTitleDropShadowEffect      = nullptr;
+    mGlobalDropShadowEffect     = nullptr;
+    mOpacityEffect              = nullptr;
+
+    // The link widget is not owned.
+    mLinkWidget = nullptr;
 }
 
 
 //--------------------------------------------------------------------------------------
 //---------------------------------------------------- Internal Tab Utilities on Compose
-
-
 void
-Tab::CheckTitleEllipsis()
+RTab::CheckTitleEllipsis()
 {
     // Reset title to saved text & recheck for ellipsis
     SetTitle( mTitleText );
@@ -821,17 +789,15 @@ Tab::CheckTitleEllipsis()
 
 //--------------------------------------------------------------------------------------
 //------------------------------------------------------ Docking Manager Registering API
-
-
 void
-Tab::Register()
+RTab::Register()
 {
     DockingManager()->RegisterTab( this );
 }
 
 
 void
-Tab::Unregister()
+RTab::Unregister()
 {
     DockingManager()->UnregisterTab( this );
 }
@@ -842,10 +808,8 @@ Tab::Unregister()
 ////////////////////////////////////////////////////////////////////////////////////////
 //--------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------- Tab Slots
-
-
 void
-Tab::ProcessCloseClicked()
+RTab::ProcessCloseClicked()
 {
     if( Dragging() || !mClosable )
         return;

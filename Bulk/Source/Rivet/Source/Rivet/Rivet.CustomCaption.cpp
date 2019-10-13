@@ -5,7 +5,7 @@
 *
 * @file     Rivet.CustomCaption.cpp
 * @author   Clement Berthaud
-* @brief    This file profides the definition for the RCustomCaption class.
+* @brief    This file provides the definition for the RCustomCaption class.
 */
 #include "Rivet/Rivet.CustomCaption.h"
 #include <QtWinExtras> // for native event

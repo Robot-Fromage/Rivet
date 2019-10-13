@@ -20,8 +20,8 @@
 
 
 // Forward Declarations
-namespace  Rivet{ class  Tab; }
-namespace  Rivet{ class  TabArea; }
+namespace  Rivet{ class  RTab; }
+namespace  Rivet{ class  RTabArea; }
 
 
 namespace  Rivet
@@ -55,28 +55,28 @@ public:
 ////                                INFO API                                        ////
 ////////////////////////////////////////////////////////////////////////////////////////
 public:
-    Tab*        CurrentDraggingTab()  const;
-    TabArea*    CurrentTargetArea()  const;
-    void        SetLastLiftedFrom( TabArea* iValue );
-    TabArea*    GetLastLiftedFrom()  const;
+    RTab*        CurrentDraggingTab()  const;
+    RTabArea*    CurrentTargetArea()  const;
+    void        SetLastLiftedFrom( RTabArea* iValue );
+    RTabArea*    GetLastLiftedFrom()  const;
 
 ////////////////////////////////////////////////////////////////////////////////////////
 ////                            REGISTER API                                        ////
 ////////////////////////////////////////////////////////////////////////////////////////
 public:
     // Public Register API for Tabs & TabAreas
-    void  RegisterTabArea(      TabArea* iTabArea );
-    void  UnregisterTabArea(    TabArea* iTabArea );
-    void  RegisterTab(          Tab* iTab );
-    void  UnregisterTab(        Tab* iTab );
+    void  RegisterTabArea(      RTabArea* iTabArea );
+    void  UnregisterTabArea(    RTabArea* iTabArea );
+    void  RegisterTab(          RTab* iTab );
+    void  UnregisterTab(        RTab* iTab );
 
 ////////////////////////////////////////////////////////////////////////////////////////
 ////                            PRIVATE SIGNAL SLOTS API                            ////
 ////////////////////////////////////////////////////////////////////////////////////////
 private slots:
     // Docking Interface Slots
-    void  TabLifted( Tab* iTab );
-    void  TabDropped( Tab* iTab );
+    void  TabLifted( RTab* iTab );
+    void  TabDropped( RTab* iTab );
 
 ////////////////////////////////////////////////////////////////////////////////////////
 ////                                PRIVATE API                                     ////
@@ -88,18 +88,18 @@ protected:
 
 private:
     // Private Connection Interface
-    void  InitConnectionsForTab( Tab* iTab );
-    void  DestroyConnectionsForTab( Tab* iTab );
+    void  InitConnectionsForTab( RTab* iTab );
+    void  DestroyConnectionsForTab( RTab* iTab );
 
 ////////////////////////////////////////////////////////////////////////////////////////
 ////                                PRIVATE DATA                                    ////
 ////////////////////////////////////////////////////////////////////////////////////////
 private:
     // Private Data Members
-    QVector< TabArea* >             mTabAreaList;
-    Tab*                            mCurrentDraggingTab;
-    TabArea*                        mCurrentTargetArea;
-    TabArea*                        mLastLiftedFrom;
+    QVector< RTabArea* >             mTabAreaList;
+    RTab*                            mCurrentDraggingTab;
+    RTabArea*                        mCurrentTargetArea;
+    RTabArea*                        mLastLiftedFrom;
 };
 
 

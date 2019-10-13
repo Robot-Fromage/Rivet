@@ -1,26 +1,17 @@
-/*************************************************************************
+/**
 *
 *   Rivet
 *__________________
 *
-* Rivet.__private__.GeometryUtils.cpp
-* 9-9-2018 15:07 GMT+1
-* Clement Berthaud - Layl
-* Please refer to LICENSE.TXT
+* @file     Rivet.__private__.GeometryUtils.cpp
+* @author   Clement Berthaud
+* @brief    This file provides the definitions for some QT Geometry utilities.
 */
-
 #include "Rivet/__private__/Rivet.__private__.GeometryUtils.h"
-
-
 #include <QWidget>
 
-
-namespace  Rivet
-{
-namespace  __private__
-{
-
-
+namespace  Rivet {
+namespace  __private__ {
 QRect
 MapRectToGlobal( QWidget* iFrom, const  QRect&  iRect )
 {

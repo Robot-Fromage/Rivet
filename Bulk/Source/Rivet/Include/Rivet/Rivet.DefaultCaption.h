@@ -5,7 +5,7 @@
 *
 * @file     Rivet.DefaultCaption.h
 * @author   Clement Berthaud
-* @brief    This file profides the declaration for the RDefaultCaption class.
+* @brief    This file provides the declaration for the RDefaultCaption class.
 */
 #pragma once
 #include "Rivet/Rivet.CustomCaption.h"
@@ -68,7 +68,7 @@ protected:
     virtual  void  resizeEvent( QResizeEvent*   event )     override;
 
 
-private:
+protected:
 //--------------------------------------------------------------------------------------
 //-------------------------------------------------------------- Internal GUI management
     /// @fn         void  Init()
@@ -85,7 +85,7 @@ private:
     /// @fn         void  Compose()
     /// @brief      Compose geometry of members in GUI.
     /// @details    Called repeatedly on resize or recompose.
-    void  Compose();
+    virtual void  Compose();
 
 
     /// @fn         void  Destroy()

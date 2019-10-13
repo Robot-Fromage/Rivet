@@ -5,7 +5,7 @@
 *
 * @file     Rivet.__private__.AbstractFramelessBlurBehindWindow.h
 * @author   Clement Berthaud
-* @brief    This file profides the declaration for the IFramelessTranslucentBlurBehindWindow class.
+* @brief    This file provides the declaration for the IFramelessTranslucentBlurBehindWindow class.
 */
 #pragma once
 #include <QWidget>

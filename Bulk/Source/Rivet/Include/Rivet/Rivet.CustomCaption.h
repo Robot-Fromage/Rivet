@@ -5,7 +5,7 @@
 *
 * @file     Rivet.CustomCaption.h
 * @author   Clement Berthaud
-* @brief    This file profides the declaration for the RCustomCaption class.
+* @brief    This file provides the declaration for the RCustomCaption class.
 */
 #pragma once
 #include <QObject>

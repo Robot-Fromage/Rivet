@@ -18,13 +18,12 @@
 #include <QTextEdit>
 
 #include <RivetCustomMainWindow>
-#include <RivetRDefaultCaption>
+#include <RivetDefaultCaption>
 #include <RivetTabArea>
-#include <RivetDockingManager>
 #include <RivetDockingCallbackLibrary>
 
 
-void  OnTabDroppedOutCB_OpenCustom( ::Rivet::Tab* iTab, ::Rivet::TabArea* iSrc );
+void  OnTabDroppedOutCB_OpenCustom( ::Rivet::RTab* iTab, ::Rivet::RTabArea* iSrc );
 
 
 class  cBrowserCaption :
@@ -67,11 +66,12 @@ public:
     }
 
     void  Init() {
-        mTabArea = new  ::Rivet::TabArea( this );
+        mTabArea = new  ::Rivet::RTabArea( this );
     }
 
     void  Build() {
-        mTabArea->SetMaximumTabWidth( 50 );
+        mTabArea->SetMinimumTabWidth( 50 );
+        mTabArea->SetMaximumTabWidth( 100 );
         mTabArea->SetOverlap( 20 );
         mTabArea->SetTabsClosable( true );
     }
@@ -86,12 +86,12 @@ public:
         delete  mTabArea;
     }
 
-    ::Rivet::TabArea* TabArea() {
+    ::Rivet::RTabArea* TabArea() {
         return  mTabArea;
     }
 
 private:
-    ::Rivet::TabArea* mTabArea;
+    ::Rivet::RTabArea* mTabArea;
 };
 
 
@@ -120,13 +120,13 @@ int  main( int argc, char *argv[] )
     w->setMinimumWidth( 300 );
     w->SetCaptionWidget( c );
     w->SetCenterWidget( s );
-    w->SetCaptionHeight( 20 );
+    w->SetCaptionHeight( 30 );
     w->resize( 800, 600 );
     w->show();
 
     for( int i = 0; i < 5; ++i )
     {
-        auto t = new ::Rivet::Tab();
+        auto t = new ::Rivet::RTab();
         t->SetColor( QColor( 255, 255, 255 ) );
         t->SetFadeColor( QColor( 180, 180, 180 ) );
         //auto m = new  ::Rivet::MonacoWidget();
@@ -143,7 +143,7 @@ int  main( int argc, char *argv[] )
 
 
 void
-OnTabDroppedOutCB_OpenCustom( ::Rivet::Tab* iTab, ::Rivet::TabArea* iSrc )
+OnTabDroppedOutCB_OpenCustom( ::Rivet::RTab* iTab, ::Rivet::RTabArea* iSrc )
 {
     auto  w = new  ::Rivet::RCustomMainWindow();
     auto  c = new  cBrowserCaption();
@@ -156,6 +156,7 @@ OnTabDroppedOutCB_OpenCustom( ::Rivet::Tab* iTab, ::Rivet::TabArea* iSrc )
     c->ActiveBackgroundColor( QColor( 220, 220, 220 ) );
     c->InactiveBackgroundColor( QColor( 200, 200, 200 ) );
     c->SetBlackControls();
+    w->move(iTab->pos() );
 
     c->TabArea()->SetBlackControls();
     c->TabArea()->EnableBlurEffectControls( false );
@@ -168,10 +169,9 @@ OnTabDroppedOutCB_OpenCustom( ::Rivet::Tab* iTab, ::Rivet::TabArea* iSrc )
     w->setMinimumWidth( 300 );
     w->SetCaptionWidget( c );
     w->SetCenterWidget( s );
-    w->SetCaptionHeight( 20 );
+    w->SetCaptionHeight( 30 );
     w->resize( 800, 600 );
 
-    w->move(iTab->pos());
     w->setFocus();
     w->show();
     w->raise();

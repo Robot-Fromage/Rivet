@@ -36,13 +36,13 @@
 struct  cHWNDZOrderingPair
 {
     int zOrder;
-    ::Rivet::TabArea* area;
+    ::Rivet::RTabArea* area;
 };
 
 // Struct for ordering and selecting area while dragging
 struct cElligibleArea
 {
-    ::Rivet::TabArea*  mArea;
+    ::Rivet::RTabArea*  mArea;
     QRegion   mRegion;
 };
 
@@ -105,14 +105,14 @@ cDockingManager::DockingManager()
 ////////////////////////////////////////////////////////////////////////////////////////
 
 
-Tab*
+RTab*
 cDockingManager::CurrentDraggingTab()  const
 {
     return  mCurrentDraggingTab;
 }
 
 
-TabArea*
+RTabArea*
 cDockingManager::CurrentTargetArea()  const
 {
     return  mCurrentTargetArea;
@@ -120,13 +120,13 @@ cDockingManager::CurrentTargetArea()  const
 
 
 void
-cDockingManager::SetLastLiftedFrom( TabArea* iValue )
+cDockingManager::SetLastLiftedFrom( RTabArea* iValue )
 {
     mLastLiftedFrom = iValue;
 }
 
 
-TabArea*
+RTabArea*
 cDockingManager::GetLastLiftedFrom()  const
 {
     return  mLastLiftedFrom;
@@ -140,28 +140,28 @@ cDockingManager::GetLastLiftedFrom()  const
 
 
 void
-cDockingManager::RegisterTabArea( TabArea* iTabArea )
+cDockingManager::RegisterTabArea( RTabArea* iTabArea )
 {
     mTabAreaList.append( iTabArea );
 }
 
 
 void
-cDockingManager::UnregisterTabArea( TabArea* iTabArea )
+cDockingManager::UnregisterTabArea( RTabArea* iTabArea )
 {
     mTabAreaList.removeAll( iTabArea );
 }
 
 
 void
-cDockingManager::RegisterTab( Tab* iTab )
+cDockingManager::RegisterTab( RTab* iTab )
 {
     InitConnectionsForTab( iTab );
 }
 
 
 void
-cDockingManager::UnregisterTab( Tab* iTab )
+cDockingManager::UnregisterTab( RTab* iTab )
 {
     DestroyConnectionsForTab( iTab );
 }
@@ -175,7 +175,7 @@ cDockingManager::UnregisterTab( Tab* iTab )
 
 
 void
-cDockingManager::TabLifted( Tab* iTab )
+cDockingManager::TabLifted( RTab* iTab )
 {
     // Processing directly after the signal was emitted
 
@@ -192,7 +192,7 @@ cDockingManager::TabLifted( Tab* iTab )
 
 
 void
-cDockingManager::TabDropped( Tab* iTab )
+cDockingManager::TabDropped( RTab* iTab )
 {
     assert( iTab == mCurrentDraggingTab );
     mCurrentDraggingTab->removeEventFilter( this );
@@ -222,7 +222,7 @@ cDockingManager::eventFilter( QObject* obj, QEvent* event )
 {
     // We process only mouse events of the current dragging tab.
     {
-        Tab* tab = dynamic_cast< Tab* >( obj );
+        RTab* tab = dynamic_cast< RTab* >( obj );
 
         if( !tab )
             // return false means process the event normally instead
@@ -271,15 +271,15 @@ cDockingManager::eventFilter( QObject* obj, QEvent* event )
     }
 
     // Selecting target area
-    TabArea* resultArea = NULL;
+    RTabArea* resultArea = NULL;
 
     QVector< cElligibleArea > elligibleVector;
-    for( TabArea* area : mTabAreaList )
+    for( RTabArea* area : mTabAreaList )
     {
         // Reset tabAreas hooks before processing the new one
         // This is safe to do even if there is none
         mCurrentDraggingTab->removeEventFilter( area );
-        QObject::disconnect( mCurrentDraggingTab, SIGNAL( Dropped( Tab* ) ), area, SLOT( ForeignTabDropped( Tab* ) ) );
+        QObject::disconnect( mCurrentDraggingTab, SIGNAL( Dropped( RTab* ) ), area, SLOT( ForeignTabDropped( RTab* ) ) );
 
         // Computing global Region for ech tabArea
         /*
@@ -366,11 +366,11 @@ cDockingManager::eventFilter( QObject* obj, QEvent* event )
     if( resultArea )
     {
         mCurrentDraggingTab->installEventFilter( resultArea );
-        QObject::connect( mCurrentDraggingTab, SIGNAL( Dropped( Tab* ) ), resultArea, SLOT( ForeignTabDropped( Tab* ) ) );
+        QObject::connect( mCurrentDraggingTab, SIGNAL( Dropped( RTab* ) ), resultArea, SLOT( ForeignTabDropped( RTab* ) ) );
         resultArea->SetCandidateTab( mCurrentDraggingTab );
     }
 
-    for( TabArea* area : mTabAreaList )
+    for( RTabArea* area : mTabAreaList )
         if( area != resultArea )
             area->SetCandidateTab( NULL );
 
@@ -383,18 +383,18 @@ cDockingManager::eventFilter( QObject* obj, QEvent* event )
 
 
 void
-cDockingManager::InitConnectionsForTab( Tab* iTab )
+cDockingManager::InitConnectionsForTab( RTab* iTab )
 {
-    QObject::connect( iTab, SIGNAL( Lifted( Tab* ) ), this, SLOT( TabLifted( Tab* ) ) );
-    QObject::connect( iTab, SIGNAL( Dropped( Tab* ) ), this, SLOT( TabDropped( Tab* ) ) );
+    QObject::connect( iTab, SIGNAL( Lifted( RTab* ) ), this, SLOT( TabLifted( RTab* ) ) );
+    QObject::connect( iTab, SIGNAL( Dropped( RTab* ) ), this, SLOT( TabDropped( RTab* ) ) );
 }
 
 
 void
-cDockingManager::DestroyConnectionsForTab( Tab* iTab )
+cDockingManager::DestroyConnectionsForTab( RTab* iTab )
 {
-    QObject::disconnect( iTab, SIGNAL( Lifted( Tab* ) ), this, SLOT( TabLifted( Tab* ) ) );
-    QObject::disconnect( iTab, SIGNAL( Dropped( Tab* ) ), this, SLOT( TabDropped( Tab* ) ) );
+    QObject::disconnect( iTab, SIGNAL( Lifted( RTab* ) ), this, SLOT( TabLifted( RTab* ) ) );
+    QObject::disconnect( iTab, SIGNAL( Dropped( RTab* ) ), this, SLOT( TabDropped( RTab* ) ) );
 }
 
 
