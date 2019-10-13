@@ -20,7 +20,7 @@ int  main( int argc, char *argv[] )
 {
     QApplication app( argc, argv );
 
-    auto  w = new  ::Rivet::CustomMainWindow();
+    auto  w = new  ::Rivet::RCustomMainWindow();
     auto  c = new  ::Rivet::DefaultCaption();
     auto  m = new  QWidget();
     m->setStyleSheet( "background-color:rgba( 0, 0, 0, 0.5 );" );

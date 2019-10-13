@@ -1,45 +1,32 @@
-/*************************************************************************
+/**
 *
 *   Rivet
 *__________________
 *
-* Rivet.CustomMainWindow.cpp
-*
-* Clement Berthaud - Layl
-* Please refer to LICENSE.TXT
+* @file     Rivet.CustomMainWindow.cpp
+* @author   Clement Berthaud
+* @brief    This file profides the definition for the RCustomWindow class.
 */
-
 #include "Rivet/Rivet.CustomMainWindow.h"
 
-
-#include <QApplication>
-
-
-namespace  Rivet
-{
-
-
+namespace  Rivet {
 //--------------------------------------------------------------------------------------
 //--------------------------------------------------------------- Default values defines
-
-
 #define  DEFAULT_MINIMUM_WIDTH 200
 
 
 //--------------------------------------------------------------------------------------
 //----------------------------------------------------------- Construction / Destruction
-
-
-CustomMainWindow::~CustomMainWindow()
+RCustomMainWindow::~RCustomMainWindow()
 {
     tSelf::Destroy();
 }
 
 
-CustomMainWindow::CustomMainWindow( QWidget *parent ) :
-    tSuperClass( parent ),
-    mCaptionWidget( NULL ),
-    mCenterWidget( NULL )
+RCustomMainWindow::RCustomMainWindow( QWidget *parent )
+    : tSuperClass(      parent  )
+    , mCaptionWidget(   nullptr )
+    , mCenterWidget(    nullptr )
 {
     tSelf::Init();
     tSelf::Build();
@@ -48,24 +35,29 @@ CustomMainWindow::CustomMainWindow( QWidget *parent ) :
 
 
 //--------------------------------------------------------------------------------------
-//-------------------------------------------------------------------------- Caption API
-
-
-CustomCaption*
-CustomMainWindow::CaptionWidget()
+//------------------------------------------------------------------- Center Caption API
+RCustomCaption*
+RCustomMainWindow::CaptionWidget()  const
 {
     return  mCaptionWidget;
 }
 
 
+QWidget*
+RCustomMainWindow::CenterWidget()  const
+{
+    return  mCenterWidget;
+}
+
+
 void
-CustomMainWindow::SetCaptionWidget( CustomCaption* iCaptionWidget )
+RCustomMainWindow::SetCaptionWidget( RCustomCaption* iCaptionWidget )
 {
     if( mCaptionWidget )
     {
-        // This is owner of mCaptionWidget, responsibility to delete
+        // this owns mCaptionWidget, hence has responsibility to delete
         delete  mCaptionWidget;
-        mCaptionWidget = NULL;
+        mCaptionWidget = nullptr;
     }
 
     if( iCaptionWidget )
@@ -80,15 +72,8 @@ CustomMainWindow::SetCaptionWidget( CustomCaption* iCaptionWidget )
 }
 
 
-QWidget*
-CustomMainWindow::CenterWidget()
-{
-    return  mCenterWidget;
-}
-
-
 void
-CustomMainWindow::SetCenterWidget( QWidget* iCenterWidget )
+RCustomMainWindow::SetCenterWidget( QWidget* iCenterWidget )
 {
     if( mCenterWidget )
     {
@@ -106,7 +91,7 @@ CustomMainWindow::SetCenterWidget( QWidget* iCenterWidget )
 
 
 void
-CustomMainWindow::Recompose()
+RCustomMainWindow::Recompose()
 {
     tSelf::Compose();
 }
@@ -114,34 +99,24 @@ CustomMainWindow::Recompose()
 
 //--------------------------------------------------------------------------------------
 //--------------------------------- Protected Non-Client OS behaviour handling overrides
-
-
 bool
-CustomMainWindow::NCHitCaption( const  QRect&  iRect, const  long iBorderWidth, long iX, long iY )
+RCustomMainWindow::NCHitCaption( const  QRect&  iRect, const  long iBorderWidth, long iX, long iY )
 {
-    bool  eligible = tSuperClass::NCHitCaption( iRect, iBorderWidth, iX, iY );
-    QPoint local = mapFromGlobal( QPoint( iX, iY ) );
-
-    if(!eligible)
+    if( !tSuperClass::NCHitCaption( iRect, iBorderWidth, iX, iY ) )
         return  false;
 
+    QPoint local = mapFromGlobal( QPoint( iX, iY ) );
     if( mCaptionWidget )
-    {
         return  mCaptionWidget->HitEmptySpace( local.x(), local.y() );
-    }
     else
-    {
         return  true;
-    }
 }
 
 
 //--------------------------------------------------------------------------------------
 //--------------------------------------------------------- Protected Qt events override
-
-
 void
-CustomMainWindow::resizeEvent( QResizeEvent*  event )
+RCustomMainWindow::resizeEvent( QResizeEvent*  event )
 {
     // Very important !
     tSuperClass::resizeEvent( event );
@@ -151,22 +126,19 @@ CustomMainWindow::resizeEvent( QResizeEvent*  event )
 }
 
 
-
 //--------------------------------------------------------------------------------------
 //--------------------------------------------------------------------- Private Qt Slots
-
-
 void
-CustomMainWindow::ProcessCloseClicked()
+RCustomMainWindow::ProcessCloseClicked()
 {
     close();
 }
 
 void
-CustomMainWindow::ProcessMaximizeClicked()
+RCustomMainWindow::ProcessMaximizeClicked()
 {
     const auto state = windowState();
-    if(state & Qt::WindowMaximized)
+    if( state & Qt::WindowMaximized )
     {
         Restore();
     }
@@ -178,7 +150,7 @@ CustomMainWindow::ProcessMaximizeClicked()
 
 
 void
-CustomMainWindow::ProcessMinimizeClicked()
+RCustomMainWindow::ProcessMinimizeClicked()
 {
     showMinimized();
 }
@@ -186,54 +158,47 @@ CustomMainWindow::ProcessMinimizeClicked()
 
 //--------------------------------------------------------------------------------------
 //--------------------------------- Protected Non-Client OS behaviour handling overrides
-
-
 void
-CustomMainWindow::Init()
+RCustomMainWindow::Init()
 {
-    // Not much there ATM but keep for consistency with the rest of the API GUI convention in my other Libs.
-    mCaptionWidget = NULL;
-    mCenterWidget = NULL;
+    mCaptionWidget  = nullptr;
+    mCenterWidget   = nullptr;
 }
 
 
 void
-CustomMainWindow::Build()
+RCustomMainWindow::Build()
 {
     setMinimumWidth( DEFAULT_MINIMUM_WIDTH );
 }
 
 
 void
-CustomMainWindow::Compose()
+RCustomMainWindow::Compose()
 {
     if( mCaptionWidget )
-    {
         mCaptionWidget->setGeometry( CaptionGeometry() );
-    }
 
     if( mCenterWidget )
-    {
         mCenterWidget->setGeometry( ContentsGeometry() );
-    }
 }
 
 
 void
-CustomMainWindow::Destroy()
+RCustomMainWindow::Destroy()
 {
     if( mCaptionWidget )
     {
         // This is owner of mCaptionWidget, responsibility to delete
         delete  mCaptionWidget;
-        mCaptionWidget = NULL;
+        mCaptionWidget = nullptr;
     }
 
     if( mCenterWidget )
     {
         // This is owner of mCaptionWidget, responsibility to delete
         delete  mCenterWidget;
-        mCenterWidget = NULL;
+        mCenterWidget = nullptr;
     }
 }
 

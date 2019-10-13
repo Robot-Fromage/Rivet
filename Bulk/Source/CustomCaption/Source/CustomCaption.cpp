@@ -15,22 +15,22 @@
 
 
 #include <RivetCustomMainWindow>
-#include <RivetCustomCaption>
+#include <RivetRCustomCaption>
 
 
-class  cMyCustomCaption :
-    public  ::Rivet::CustomCaption
+class  cMyRCustomCaption :
+    public  ::Rivet::RCustomCaption
 {
-    typedef  ::Rivet::CustomCaption  tSuperClass;
+    typedef  ::Rivet::RCustomCaption  tSuperClass;
 
 public:
-    virtual  ~cMyCustomCaption()
+    virtual  ~cMyRCustomCaption()
     {
         for( auto item : mBtns )  delete item;
     };
 
 
-    cMyCustomCaption( QWidget*  iParent = NULL ):tSuperClass( iParent )
+    cMyRCustomCaption( QWidget*  iParent = NULL ):tSuperClass( iParent )
     {
         for( int i = 0; i < 10; ++i )
         {
@@ -61,8 +61,8 @@ int  main( int argc, char *argv[] )
 {
     QApplication app( argc, argv );
 
-    auto  w = new  ::Rivet::CustomMainWindow();
-    auto  c = new  cMyCustomCaption();
+    auto  w = new  ::Rivet::RCustomMainWindow();
+    auto  c = new  cMyRCustomCaption();
     w->SetCaptionWidget( c );
     w->resize( 800, 600 );
     w->show();

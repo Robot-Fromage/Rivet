@@ -1,49 +1,38 @@
-/*************************************************************************
+/**
 *
 *   Rivet
 *__________________
 *
-* Rivet.CustomCaption.cpp
-*
-* Clement Berthaud - Layl
-* Please refer to LICENSE.TXT
+* @file     Rivet.CustomCaption.cpp
+* @author   Clement Berthaud
+* @brief    This file profides the definition for the RCustomCaption class.
 */
-
 #include "Rivet/Rivet.CustomCaption.h"
+#include <QtWinExtras> // for native event
 
-
-#include <QtWinExtras>
-
-
-namespace  Rivet
-{
-
-
+namespace  Rivet {
 //--------------------------------------------------------------------------------------
 //----------------------------------------------------------- Construction / Destruction
-
-
-CustomCaption::~CustomCaption()
+RCustomCaption::~RCustomCaption()
 {
 }
 
-CustomCaption::CustomCaption( QWidget* parent ) :
-    tSuperClass( parent )
+
+RCustomCaption::RCustomCaption( QWidget* parent )
+    : tSuperClass( parent )
 {
 }
 
 
 //--------------------------------------------------------------------------------------
 //----------------------------------------- Custom NC Handling implementation in caption
-
-
 bool
-CustomCaption::HitEmptySpace( long iX, long iY )
+RCustomCaption::HitEmptySpace( long iX, long iY )
 {
     QPoint local = mapFromParent( QPoint( iX, iY ) );
 
+    // Iterate over children and return false if hit children
     QList<QWidget*> list = this->findChildren<QWidget*>();
-
     for( QWidget *w : list) {
         if( w->parent() != this )
             continue;
@@ -53,16 +42,15 @@ CustomCaption::HitEmptySpace( long iX, long iY )
             return  false;
     }
 
+    // No child was hit, return true.
     return  true;
 }
 
 
 //--------------------------------------------------------------------------------------
-//----------------------------------------- Protected Qt / WinAPI native events override
-
-
+//--------------------------------------------------------- Protected Qt event overrides
 bool
-CustomCaption::nativeEvent( const  QByteArray& eventType, void* message, long* result )
+RCustomCaption::nativeEvent( const  QByteArray& eventType, void* message, long* result )
 {
     // Cast to WINAPI standards
     MSG*    wmsg    = reinterpret_cast< MSG* >( message );
@@ -89,24 +77,23 @@ CustomCaption::nativeEvent( const  QByteArray& eventType, void* message, long* r
 
 
 //--------------------------------------------------------------------------------------
-//--------------------------------------------------------------------- Private Qt Slots
-
-
+//---------------------------------------------------------------------- Public Qt Slots
 void
-CustomCaption::ProcessCloseClicked()
+RCustomCaption::ProcessCloseClicked()
 {
     emit  CloseClicked();
 }
 
+
 void
-CustomCaption::ProcessMaximizeClicked()
+RCustomCaption::ProcessMaximizeClicked()
 {
     emit  MaximizeClicked();
 }
 
 
 void
-CustomCaption::ProcessMinimizeClicked()
+RCustomCaption::ProcessMinimizeClicked()
 {
     emit  MinimizeClicked();
 }

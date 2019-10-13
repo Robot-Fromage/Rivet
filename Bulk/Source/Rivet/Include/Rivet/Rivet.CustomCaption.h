@@ -1,57 +1,83 @@
-/*************************************************************************
+/**
 *
 *   Rivet
 *__________________
 *
-* Rivet.CustomCaption.h
-* 9-9-2018 18:56 GMT+1
-* Clement Berthaud - Layl
-* Please refer to LICENSE.TXT
+* @file     Rivet.CustomCaption.h
+* @author   Clement Berthaud
+* @brief    This file profides the declaration for the RCustomCaption class.
 */
-
 #pragma once
-
-
 #include <QObject>
 #include <QWidget>
 
-
-namespace  Rivet
+namespace  Rivet {
+/////////////////////////////////////////////////////
+/// @class      RCustomCaption
+/// @brief      The RCustomCaption class provides a base framework for custom caption widgets.
+/// @details    RCustomCaption must have a HitEmptySpace method, override this for custom behaviours.
+///             The default implementation returns false if it hits any of the child widgets.
+///             Children can be set externally.
+///             Parent Custom window will listen to the signals.
+class  RCustomCaption
+    : public QWidget
 {
-
-
-class  CustomCaption :
-    public QWidget
-{
-
     Q_OBJECT
 
+private:
+//--------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------- Typedefs
+    typedef  RCustomCaption     tSelf;
     typedef  QWidget            tSuperClass;
-    typedef  CustomCaption      tSelf;
 
 public:
-    // Construction / Destruction
-    virtual  ~CustomCaption();
-    CustomCaption( QWidget* parent = Q_NULLPTR );
+//--------------------------------------------------------------------------------------
+//----------------------------------------------------------- Construction / Destruction
+    /// @fn         virtual  ~RCustomCaption()
+    /// @brief      Default Destructor.
+    /// @details    virtual, does nothing.
+    virtual  ~RCustomCaption();
+
+
+    /// @fn         RCustomCaption( QWidget *parent = nullptr )
+    /// @brief      Default Constructor.
+    /// @details    Init member data with default values.
+    RCustomCaption( QWidget* parent = nullptr );
+
 
 public:
-    // Custom NC Handling implementation in caption
+//--------------------------------------------------------------------------------------
+//----------------------------------------- Custom NC Handling implementation in caption
+    /// @fn         virtual  bool  HitEmptySpace( long iX, long iY )
+    /// @brief      Check if the cursor hit empty space to allow for NC events.
+    /// @details    Handles internal geometry tests.
+    /// @param      iX      the x coordinate in parent space.
+    /// @param      iY      the y coordinate in parent space.
+    /// @return     A boolean flag stating if the hit succeeded or not.
     virtual  bool  HitEmptySpace( long iX, long iY );
 
+
 protected:
-    // Protected Qt / WinAPI native events override
+//--------------------------------------------------------------------------------------
+//--------------------------------------------------------- Protected Qt event overrides
     virtual  bool  nativeEvent( const  QByteArray& eventType, void* message, long* result )  override;
 
+
 public slots:
-    // Private Qt Slots
+//--------------------------------------------------------------------------------------
+//---------------------------------------------------------------------- Public Qt Slots
     void  ProcessCloseClicked();
     void  ProcessMaximizeClicked();
     void  ProcessMinimizeClicked();
+
+
 signals:
-    // Private Qt Slots
+//--------------------------------------------------------------------------------------
+//-------------------------------------------------------------------- Public Qt Signals
     void  CloseClicked();
     void  MaximizeClicked();
     void  MinimizeClicked();
+
 
 };
 

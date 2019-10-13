@@ -1,79 +1,127 @@
-/*************************************************************************
+/**
 *
 *   Rivet
 *__________________
 *
-* Rivet.CustomMainWindow.h
-*
-* Clement Berthaud - Layl
-* Please refer to LICENSE.TXT
+* @file     Rivet.CustomMainWindow.h
+* @author   Clement Berthaud
+* @brief    This file profides the declaration for the RCustomWindow class.
 */
-
 #pragma once
-
-
-#include <QWidget>
-
-
 #include "Rivet/__private__/Rivet.__private__.CustomMainWindowBase.h"
 #include "Rivet/Rivet.CustomCaption.h"
+#include <QWidget>
 
-
-// Tertiary level for custom windows
-// Handles Custom events and provides Custom API calls
-// You can derive this class if you want more customization
-
-
-namespace  Rivet
-{
-
-
-class  CustomMainWindow :
-    public ::Rivet::__private__::RCustomMainWindowBase
+namespace  Rivet {
+/////////////////////////////////////////////////////
+/// @class      RCustomMainWindow
+/// @brief      The RCustomMainWindow class provides a custom window widget.
+/// @details    Tertiary level for custom windows.
+///             Handles Custom events and provides Custom API calls
+///             Users can derive this class for more customization
+class  RCustomMainWindow
+    : public ::Rivet::__private__::RCustomMainWindowBase
 {
     Q_OBJECT
 
+private:
+//--------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------- Typedefs
+    typedef  RCustomMainWindow                              tSelf;
     typedef  ::Rivet::__private__::RCustomMainWindowBase    tSuperClass;
-    typedef  CustomMainWindow                               tSelf;
 
 public:
-    // Construction / Destruction
-    virtual  ~CustomMainWindow();
-    CustomMainWindow( QWidget* parent = Q_NULLPTR );
+//--------------------------------------------------------------------------------------
+//----------------------------------------------------------- Construction / Destruction
+    virtual  ~RCustomMainWindow();
+    RCustomMainWindow( QWidget* parent = nullptr );
+
 
 public:
-    // Center / Caption API
-    CustomCaption*  CaptionWidget();  // Return pointer to mCaptionWidget, this keeps owning it
-    void  SetCaptionWidget( CustomCaption* iCaptionWidget );  // Pass pointer to mCaptionWidget, becoming owner
-    //-
-    QWidget* CenterWidget();  // Return pointer to mCenterWidget, keeps owning it.
-    void  SetCenterWidget( QWidget* iCenterWidget ); // Acquire ownership
-    void  Recompose();
+//--------------------------------------------------------------------------------------
+//------------------------------------------------------------------- Center Caption API
+    /// @fn         RCustomCaption*  CaptionWidget()  const
+    /// @brief      Getter for custom caption widget
+    /// @return     A pointer to the owned member mCaptionWidget, can be null.
+    RCustomCaption*     CaptionWidget()  const;
 
-protected:
-    // Protected Non-Client OS behaviour handling overrides
+
+    /// @fn         QWidget*  CenterWidget()  const
+    /// @brief      Getter for custom center widget
+    /// @return     A pointer to the owned  member mCenterWidget, can be null.
+    QWidget*            CenterWidget()  const;
+
+
+    /// @fn         void  SetCaptionWidget( RCustomCaption* iCaptionWidget )
+    /// @brief      Setter for the custom caption widget.
+    /// @param      iCaptionWidget      The RCustomCaption* to take ownership over and place in the window.
+    /// @details    The object takes ownership over the passed parameter. Can be null.
+    void                SetCaptionWidget( RCustomCaption* iCaptionWidget );
+
+
+    /// @fn         void  SetCenterWidget( QWidget* iCenterWidget )
+    /// @brief      Setter for the custom center widget.
+    /// @param      iCenterWidget       The QWidget* to take ownership over and place in the window.
+    /// @details    The object takes ownership over the passed parameter. Can be null.
+    void                SetCenterWidget( QWidget* iCenterWidget );
+    void                Recompose();
+
+
+//--------------------------------------------------------------------------------------
+//----------------------------------------------- Protected Non-Client OS event handling
+    /// @fn         virtual  bool  NCHitCaption( const  QRect&  iRect, const  long iBorderWidth, long iX, long iY )  override
+    /// @brief      Override of the Hit-Test to check if the cursor hits the caption.
+    /// @details    This implementation delegates the call to the caption widget if elligible.
+    /// @return     A boolean value stating the behaviour to take on caption events.
     virtual  bool  NCHitCaption( const  QRect&  iRect, const  long iBorderWidth, long iX, long iY )  override;
 
+
 protected:
-    // Protected Qt events override
+//--------------------------------------------------------------------------------------
+//--------------------------------------------------------- Protected Qt events override
     virtual  void  resizeEvent( QResizeEvent*  event )  override;
 
+
 private  slots:
-    // Private Qt Slots
+//--------------------------------------------------------------------------------------
+//--------------------------------------------------------------------- Private Qt Slots
     void  ProcessCloseClicked();
     void  ProcessMaximizeClicked();
     void  ProcessMinimizeClicked();
 
-private:
-    // Internal GUI management
-    void  Init();       // allocate GUI members
-    void  Build();      // set GUI members flags, styles, properties
-    void  Compose();    // compose members in GUI
-    void  Destroy();    // delete GUI members
 
 private:
-    CustomCaption* mCaptionWidget;
-    QWidget* mCenterWidget;
+//--------------------------------------------------------------------------------------
+//-------------------------------------------------------------- Internal GUI management
+    /// @fn         void  Init()
+    /// @brief      Init GUI members.
+    /// @details    Called only once by constructor.
+    void  Init();
+
+    /// @fn         void  Build()
+    /// @brief      Setup GUI members flags, styles, properties.
+    /// @details    Called only once by constructor.
+    void  Build();
+
+
+    /// @fn         void  Build()
+    /// @brief      Compose geometry of members in GUI.
+    /// @details    Called repeatedly on resize or recompose.
+    void  Compose();
+
+
+    /// @fn         void  Build()
+    /// @brief      Delete GUI members.
+    /// @details    Called only once by destructor.
+    void  Destroy();
+
+
+private:
+//--------------------------------------------------------------------------------------
+//----------------------------------------------------------------- Private Data Members
+    RCustomCaption* mCaptionWidget; ///< The RCustomCaption widget, owned but set via the accessors, can be null.
+    QWidget*        mCenterWidget;  ///< The center QWidget, owned but set via the accessors, can be null.
+
 
 };
 

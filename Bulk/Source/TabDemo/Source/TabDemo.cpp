@@ -99,7 +99,7 @@ int  main( int argc, char *argv[] )
 {
     QApplication app( argc, argv );
 
-    auto  w = new  ::Rivet::CustomMainWindow();
+    auto  w = new  ::Rivet::RCustomMainWindow();
     auto  c = new  cBrowserCaption();
     auto  s = new  QStackedWidget();
 
@@ -145,7 +145,7 @@ int  main( int argc, char *argv[] )
 void
 OnTabDroppedOutCB_OpenCustom( ::Rivet::Tab* iTab, ::Rivet::TabArea* iSrc )
 {
-    auto  w = new  ::Rivet::CustomMainWindow();
+    auto  w = new  ::Rivet::RCustomMainWindow();
     auto  c = new  cBrowserCaption();
     auto  s = new  QStackedWidget();
 

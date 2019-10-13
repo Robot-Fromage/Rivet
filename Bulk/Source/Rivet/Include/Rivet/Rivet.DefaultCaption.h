@@ -24,12 +24,12 @@ namespace  Rivet
 
 
 class  DefaultCaption :
-    public  CustomCaption
+    public  RCustomCaption
 {
 
     Q_OBJECT
 
-    typedef  CustomCaption  tSuperClass;
+    typedef  RCustomCaption  tSuperClass;
 
 public:
     // Construction / Destruction
