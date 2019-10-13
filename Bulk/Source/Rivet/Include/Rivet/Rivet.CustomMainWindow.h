@@ -64,6 +64,11 @@ public:
     /// @param      iCenterWidget       The QWidget* to take ownership over and place in the window.
     /// @details    The object takes ownership over the passed parameter. Can be null.
     void                SetCenterWidget( QWidget* iCenterWidget );
+
+
+    /// @fn         void  Recompose()
+    /// @brief      Recompose internal geometry.
+    /// @details    Direct call to private Compose method.
     void                Recompose();
 
 
@@ -104,13 +109,13 @@ private:
     void  Build();
 
 
-    /// @fn         void  Build()
+    /// @fn         void  Compose()
     /// @brief      Compose geometry of members in GUI.
     /// @details    Called repeatedly on resize or recompose.
     void  Compose();
 
 
-    /// @fn         void  Build()
+    /// @fn         void  Destroy()
     /// @brief      Delete GUI members.
     /// @details    Called only once by destructor.
     void  Destroy();
