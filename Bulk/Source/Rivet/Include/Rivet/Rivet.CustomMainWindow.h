@@ -29,11 +29,11 @@ namespace  Rivet
 
 
 class  CustomMainWindow :
-    public ::Rivet::__private__::cCustomMainWindowBase
+    public ::Rivet::__private__::RCustomMainWindowBase
 {
     Q_OBJECT
 
-    typedef  ::Rivet::__private__::cCustomMainWindowBase    tSuperClass;
+    typedef  ::Rivet::__private__::RCustomMainWindowBase    tSuperClass;
     typedef  CustomMainWindow                               tSelf;
 
 public:

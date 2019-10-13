@@ -27,7 +27,7 @@ class  CustomCaption :
     Q_OBJECT
 
     typedef  QWidget            tSuperClass;
-    typedef  CustomCaption     tSelf;
+    typedef  CustomCaption      tSelf;
 
 public:
     // Construction / Destruction

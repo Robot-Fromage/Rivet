@@ -1,57 +1,38 @@
-/*************************************************************************
+/**
 *
 *   Rivet
 *__________________
 *
-* Rivet.__private__.AbstractFramelessBlurBehindWindow.cpp
-* 9-9-2018 13:27 GMT+1
-* Clement Berthaud - Layl
-* Please refer to LICENSE.TXT
+* @file     Rivet.__private__.AbstractFramelessBlurBehindWindow.cpp
+* @author   Clement Berthaud
+* @brief    This file provides the definition for the IFramelessTranslucentBlurBehindWindow class.
 */
-
 #include "Rivet/__private__/Rivet.__private__.AbstractFramelessBlurBehindWindow.h"
-
-
 #include "Rivet/__private__/Rivet.__private__.WinExtras.h"
-
-
 #include <QtWinExtras>
 
-
-namespace  Rivet
-{
-namespace  __private__
-{
-
-
+namespace  Rivet {
+namespace  __private__ {
 //--------------------------------------------------------------------------------------
 //--------------------------------------------------------------- Default values defines
-
-
 #define  DEFAULT_BORDER_WIDTH 8
-
 
 //--------------------------------------------------------------------------------------
 //-------------------------------------------------------------------- Utilities defines
-
-
 #define EXTRACT_X( lp )  ( ( int )( short ) LOWORD( lp ) )
 #define EXTRACT_Y( lp )  ( ( int )( short ) HIWORD( lp ) )
 
-
-
 //--------------------------------------------------------------------------------------
 //----------------------------------------------------------- Construction / Destruction
-
-
-cAbstractFramelessBlurBehindWindow::~cAbstractFramelessBlurBehindWindow()
+//virtual
+IFramelessTranslucentBlurBehindWindow::~IFramelessTranslucentBlurBehindWindow()
 {
 }
 
 
-cAbstractFramelessBlurBehindWindow::cAbstractFramelessBlurBehindWindow( QWidget* parent ) :
-    tSuperClass(parent),
-    mBorderWidth( DEFAULT_BORDER_WIDTH )
+IFramelessTranslucentBlurBehindWindow::IFramelessTranslucentBlurBehindWindow( QWidget* parent )
+    : tSuperClass(  parent                  )
+    , mBorderWidth( DEFAULT_BORDER_WIDTH    )
 {
     // The functions are called in this order, and this is important.
     // otherwise some flags are overriden in an unwanted way and init isn't done properly.
@@ -61,43 +42,39 @@ cAbstractFramelessBlurBehindWindow::cAbstractFramelessBlurBehindWindow( QWidget*
 
 
 //--------------------------------------------------------------------------------------
-//----------- Protected Non-Client OS geometry setup for behaviour override in childrens
-
-
+//----------------------------------------------------- Protected Non-Client OS geometry
 int
-cAbstractFramelessBlurBehindWindow::BorderWidth()
+IFramelessTranslucentBlurBehindWindow::BorderWidth()  const
 {
     return  mBorderWidth;
 }
 
 
 int
-cAbstractFramelessBlurBehindWindow::DefaultBorderWidth()
+IFramelessTranslucentBlurBehindWindow::DefaultBorderWidth()  const
 {
     return  DEFAULT_BORDER_WIDTH;
 }
 
 
 void
-cAbstractFramelessBlurBehindWindow::SetBorderWidth( int iValue )
+IFramelessTranslucentBlurBehindWindow::SetBorderWidth( int iValue )
 {
     mBorderWidth = iValue;
 }
 
 
 void
-cAbstractFramelessBlurBehindWindow::ResetBorderWidth()
+IFramelessTranslucentBlurBehindWindow::ResetBorderWidth()
 {
     SetBorderWidth( DefaultBorderWidth() );
 }
 
 
 //--------------------------------------------------------------------------------------
-//---------------------------------------------------------------------- Blur enable api
-
-
+//---------------------------------------------------------------------- Public Blur API
 void
-cAbstractFramelessBlurBehindWindow::EnableBlurBehind()
+IFramelessTranslucentBlurBehindWindow::EnableBlurBehind()
 {
     // We enable blur in different ways according to windows version
     // That way all windows versions are covered since windows vista, simple enough.
@@ -114,7 +91,7 @@ cAbstractFramelessBlurBehindWindow::EnableBlurBehind()
 
 
 void
-cAbstractFramelessBlurBehindWindow::DisableBlurBehind()
+IFramelessTranslucentBlurBehindWindow::DisableBlurBehind()
 {
     // Do not set autofill background because it messes up the background erasing,
     // and transparent shapes will be painted over & not erased
@@ -138,11 +115,9 @@ cAbstractFramelessBlurBehindWindow::DisableBlurBehind()
 
 
 //--------------------------------------------------------------------------------------
-//----------------------------------------------------------- Private WinAPI flags setup
-
-
+//------------------------------------------------------------ Private Win32 flags setup
 void
-cAbstractFramelessBlurBehindWindow::InitNativeFrameless()
+IFramelessTranslucentBlurBehindWindow::InitNativeFrameless()
 {
     // Drop shadow, this is redundant but not conflicting with windows 8 ( or greater ) way of setting glass.
     QtWin::extendFrameIntoClientArea( this, 1, 1, 1, 1 );
@@ -154,11 +129,9 @@ cAbstractFramelessBlurBehindWindow::InitNativeFrameless()
 
 
 //--------------------------------------------------------------------------------------
-//------------------------------------------- Protected Non-Client OS behaviour handling
-
-
+//------------------------------------------------- Private Non-Client OS event handling
 void
-cAbstractFramelessBlurBehindWindow::WM_NCHITTEST_Event_Handler( int iX, int iY, long* oResult )
+IFramelessTranslucentBlurBehindWindow::WM_NCHITTEST_Event_Handler( int iX, int iY, long* oResult )
 {
     // Custom Handling of NonClient Event, normally handled by the native Caption.
     // Here we handle native OS resize & move events.
@@ -168,32 +141,35 @@ cAbstractFramelessBlurBehindWindow::WM_NCHITTEST_Event_Handler( int iX, int iY, 
     // Security, ensure *oResult = 0 as this will be the return result in case
     // nothing is handled in this function, that means we are in client area and
     // the Non Client Event shouldn't be processed.
+    assert( oResult );
     *oResult = 0;
 
     // Collect rect and size data
-    bool resizeHorizontal   = minimumWidth() != maximumWidth();
-    bool resizeVertical     = minimumHeight() != maximumHeight();
+    bool resizeHorizontalEnabled    = minimumWidth() != maximumWidth();
+    bool resizeVerticalEnabled      = minimumHeight() != maximumHeight();
 
-    // Shape the data to be compatible with windows API stuff.
+    // cast the data to be compatible with windows API stuff.
     const LONG border_width = mBorderWidth;
     RECT winrect;
     GetWindowRect( reinterpret_cast< HWND >( winId() ), &winrect );
     QRect rect( winrect.left, winrect.top, winrect.right - winrect.left, winrect.bottom - winrect.top );
 
-    // Allow resize ?
-    if( resizeHorizontal )
+    // Handle resize horizontal on left & right borders
+    if( resizeHorizontalEnabled )
     {
         if( NCHitLeftBorder(    rect, border_width, iX, iY) )   *oResult = HTLEFT;
         if( NCHitRightBorder(   rect, border_width, iX, iY) )   *oResult = HTRIGHT;
     }
 
-    if( resizeVertical )
+    // Handle resize vertical on top & bot borders
+    if( resizeVerticalEnabled )
     {
         if( NCHitBottomBorder(   rect, border_width, iX, iY) )  *oResult = HTBOTTOM;
         if( NCHitTopBorder(      rect, border_width, iX, iY) )  *oResult = HTTOP;
     }
 
-    if( resizeHorizontal && resizeVertical )
+    // Handle resize on corners
+    if( resizeHorizontalEnabled && resizeVerticalEnabled )
     {
         if( NCHitBotLeftCorner(  rect, border_width, iX, iY) )  *oResult = HTBOTTOMLEFT;
         if( NCHitBotRightCorner( rect, border_width, iX, iY) )  *oResult = HTBOTTOMRIGHT;
@@ -201,8 +177,8 @@ cAbstractFramelessBlurBehindWindow::WM_NCHITTEST_Event_Handler( int iX, int iY, 
         if( NCHitTopRightCorner( rect, border_width, iX, iY) )  *oResult = HTTOPRIGHT;
     }
 
-    // Allow drag move ?
-    // This is reimplemented in children of this class.
+    // Handle drag move based on hit caption test
+    // Note NCHitCaption is generally overriden in children of this class.
     if(*oResult==0)
     {
         if( NCHitCaption( rect, border_width, iX, iY ) )        *oResult = HTCAPTION ;
@@ -211,75 +187,69 @@ cAbstractFramelessBlurBehindWindow::WM_NCHITTEST_Event_Handler( int iX, int iY, 
 
 
 bool
-cAbstractFramelessBlurBehindWindow::NCHitLeftBorder( const  QRect&  iRect, const  long iBorderWidth, long iX, long iY )
+IFramelessTranslucentBlurBehindWindow::NCHitLeftBorder( const  QRect&  iRect, const  long iBorderWidth, long iX, long iY )
 {
-    // Default implementation can be overriden in childs of this class.
     return  iX >= iRect.left() && iX < iRect.left() + iBorderWidth;
 }
 
 
 bool
-cAbstractFramelessBlurBehindWindow::NCHitRightBorder( const  QRect&  iRect, const  long iBorderWidth, long iX, long iY )
+IFramelessTranslucentBlurBehindWindow::NCHitRightBorder( const  QRect&  iRect, const  long iBorderWidth, long iX, long iY )
 {
-    // Default implementation can be overriden in childs of this class.
     return  iX < iRect.right() && iX >= iRect.right() - iBorderWidth;
 }
 
 
 bool
-cAbstractFramelessBlurBehindWindow::NCHitTopBorder( const  QRect&  iRect, const  long iBorderWidth, long iX, long iY )
+IFramelessTranslucentBlurBehindWindow::NCHitTopBorder( const  QRect&  iRect, const  long iBorderWidth, long iX, long iY )
 {
-    // Default implementation can be overriden in childs of this class.
     return  iY >= iRect.top() && iY < iRect.top() + iBorderWidth;
 }
 
 
 bool
-cAbstractFramelessBlurBehindWindow::NCHitBottomBorder( const  QRect&  iRect, const  long iBorderWidth, long iX, long iY )
+IFramelessTranslucentBlurBehindWindow::NCHitBottomBorder( const  QRect&  iRect, const  long iBorderWidth, long iX, long iY )
 {
-    // Default implementation can be overriden in childs of this class.
     return  iY < iRect.bottom()&& iY >= iRect.bottom() - iBorderWidth;
 }
 
 
 bool
-cAbstractFramelessBlurBehindWindow::NCHitTopLeftCorner( const  QRect&  iRect, const  long iBorderWidth, long iX, long iY )
+IFramelessTranslucentBlurBehindWindow::NCHitTopLeftCorner( const  QRect&  iRect, const  long iBorderWidth, long iX, long iY )
 {
-    // Default implementation can be overriden in childs of this class.
     return  NCHitTopBorder( iRect, iBorderWidth, iX, iY ) &&
             NCHitLeftBorder( iRect, iBorderWidth, iX, iY );
 }
 
 
 bool
-cAbstractFramelessBlurBehindWindow::NCHitTopRightCorner( const  QRect&  iRect, const  long iBorderWidth, long iX, long iY )
+IFramelessTranslucentBlurBehindWindow::NCHitTopRightCorner( const  QRect&  iRect, const  long iBorderWidth, long iX, long iY )
 {
-    // Default implementation can be overriden in childs of this class.
     return  NCHitTopBorder( iRect, iBorderWidth, iX, iY ) &&
             NCHitRightBorder( iRect, iBorderWidth, iX, iY );
 }
 
 
 bool
-cAbstractFramelessBlurBehindWindow::NCHitBotRightCorner( const  QRect&  iRect, const  long iBorderWidth, long iX, long iY )
+IFramelessTranslucentBlurBehindWindow::NCHitBotRightCorner( const  QRect&  iRect, const  long iBorderWidth, long iX, long iY )
 {
-    // Default implementation can be overriden in childs of this class.
     return  NCHitBottomBorder( iRect, iBorderWidth, iX, iY ) &&
             NCHitRightBorder( iRect, iBorderWidth, iX, iY );
 }
 
 
 bool
-cAbstractFramelessBlurBehindWindow::NCHitBotLeftCorner( const  QRect&  iRect, const  long iBorderWidth, long iX, long iY )
+IFramelessTranslucentBlurBehindWindow::NCHitBotLeftCorner( const  QRect&  iRect, const  long iBorderWidth, long iX, long iY )
 {
-    // Default implementation can be overriden in childs of this class.
     return  NCHitBottomBorder( iRect, iBorderWidth, iX, iY ) &&
             NCHitLeftBorder( iRect, iBorderWidth, iX, iY );
 }
 
 
+//--------------------------------------------------------------------------------------
+//----------------------------------------------- Protected Non-Client OS event handling
 bool
-cAbstractFramelessBlurBehindWindow::NCHitCaption( const  QRect&  iRect, const  long iBorderWidth, long iX, long iY )
+IFramelessTranslucentBlurBehindWindow::NCHitCaption( const  QRect&  iRect, const  long iBorderWidth, long iX, long iY )
 {
     // Default implementation can be overriden in childs of this class.
     return  true;
@@ -287,13 +257,11 @@ cAbstractFramelessBlurBehindWindow::NCHitCaption( const  QRect&  iRect, const  l
 
 
 //--------------------------------------------------------------------------------------
-//----------------------------------------- Protected Qt / WinAPI native events override
-
-
+//------------------------------------------ Protected Qt / Win32 native events override
 bool
-cAbstractFramelessBlurBehindWindow::nativeEvent( const  QByteArray&  eventType, void* message, long* result)
+IFramelessTranslucentBlurBehindWindow::nativeEvent( const  QByteArray&  eventType, void* message, long* result)
 {
-    // Cast to WINAPI standards
+    // Cast to Win32 API types.
     MSG*    wmsg    = reinterpret_cast< MSG* >( message );
     LPARAM  lparam  = wmsg->lParam;
     WPARAM  wparam  = wmsg->wParam;
@@ -302,34 +270,40 @@ cAbstractFramelessBlurBehindWindow::nativeEvent( const  QByteArray&  eventType, 
 
     switch( msg )
     {
-
+        // Native geometry computing and drawing of the non client area.
         case WM_NCCALCSIZE:
         {
-            // Abort computing & drawing of the non client area.
+            // Abort computing & drawing of the non client area by setting result to 0.
+            // Return true ( do not propagate any further )
+            // Event is handled with result 0 is important.
             *result = 0;
-            return  true; // Return true ( true means do not compute any further ), & Event is handled with result 0 is important.
-
+            return  true;
         }
 
+        // Handle non-client area snap resize & drag behaviours & detection
         case WM_NCHITTEST:
         {
-            // Handle non-client area snap resize & drag behaviours & detection
             int x = EXTRACT_X( lparam );
             int y = EXTRACT_Y( lparam );
 
             // Custom handling delegate
             WM_NCHITTEST_Event_Handler( x, y, result );
 
+            // If any test succeeded, return true, stop propagation
+            // See WM_NCHITTEST_Event_Handler for details
             if( *result != 0 )
-                return  true; // Return true, event is handled with result set in WM_NCHITTEST_Event_Handler
+                return  true;
+            else
+                return  tSuperClass::nativeEvent( eventType, message, result );
         }
 
+        // The case is not handled ? Treat it the normal way & return.
         default:
         {
-            // The case is not handled ? Treat it the normal way & return.
             return  tSuperClass::nativeEvent( eventType, message, result );
         }
-    }
+
+    } // switch( msg )
 }
 
 

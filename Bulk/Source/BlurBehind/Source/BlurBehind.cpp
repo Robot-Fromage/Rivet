@@ -23,7 +23,7 @@ int  main( int argc, char *argv[] )
     auto  w = new  ::Rivet::CustomMainWindow();
     auto  c = new  ::Rivet::DefaultCaption();
     auto  m = new  QWidget();
-    m->setStyleSheet( "background-color:rgba( 0, 0, 0, 0.5 );" );
+    m->setStyleSheet( "background-color:rgba( 0, 0, 0, 0.8 );" );
     w->SetCaptionWidget( c );
     w->SetCenterWidget( m );
     w->resize( 800, 600 );

@@ -1,24 +1,20 @@
-/*************************************************************************
+/**
 *
 *   Rivet
 *__________________
 *
-* Rivet.__private__.CustomMainWindowBase.cpp
-*
-* Clement Berthaud - Layl
-* Please refer to LICENSE.TXT
+* @file     Rivet.__private__.CustomMainWindowBase.cpp
+* @author   Clement Berthaud
+* @brief    This file profides the definition for the RCustomMainWindowBase class.
 */
-
 #include "Rivet/__private__/Rivet.__private__.CustomMainWindowBase.h"
-
-
 #include <QApplication>
 #include <QDesktopWidget>
 #include <QResizeEvent>
-#include <Windows.h>
+#include <Windows.h> // For GetSystemMetrics
 
-
-// Default values defines
+//--------------------------------------------------------------------------------------
+//--------------------------------------------------------------- Default values defines
 #define  DEFAULT_CAPTION_HEIGHT 30
 #define  DEFAULT_PADDING_LEFT   0
 #define  DEFAULT_PADDING_TOP    0
@@ -26,31 +22,25 @@
 #define  DEFAULT_PADDING_BOTTOM 0
 #define  DEFAULT_PADDINGS       DEFAULT_PADDING_LEFT, DEFAULT_PADDING_TOP, DEFAULT_PADDING_RIGHT, DEFAULT_PADDING_BOTTOM
 
-
-namespace  Rivet
-{
-namespace  __private__
-{
-
-
+namespace  Rivet {
+namespace  __private__ {
 //--------------------------------------------------------------------------------------
 //----------------------------------------------------------- Construction / Destruction
-
-
-cCustomMainWindowBase::~cCustomMainWindowBase()
+RCustomMainWindowBase::~RCustomMainWindowBase()
 {
 }
 
 
-cCustomMainWindowBase::cCustomMainWindowBase( QWidget *parent ) :
-    tSuperClass( parent ),
-    mCaptionHeight(     DEFAULT_CAPTION_HEIGHT  ),
-    mPaddings(          DEFAULT_PADDINGS        ),
-    mRestoreGeometry(   QRect()                 ),
-    mMaximized(         false                   ),
-    mLatestOldPos(      QPoint()                ),
-    mLatestOldSize(     QSize()                 ),
-    mOverrideContentsMargins( QMargins()        )
+RCustomMainWindowBase::RCustomMainWindowBase( QWidget *parent )
+    : tSuperClass(              parent                  )
+    , mCaptionHeight(           DEFAULT_CAPTION_HEIGHT  )
+    , mPaddings(                DEFAULT_PADDINGS        )
+    , mRestoreGeometry(         QRect()                 )
+    , mMaximized(               false                   )
+    , mLatestOldPos(            QPoint()                )
+    , mLatestOldSize(           QSize()                 )
+    , mIsResizing(              false                   )
+    , mOverrideContentsMargins( QMargins()              )
 {
     // Initialize mLatestOldPos in order to avoid it being restored in invalid location when restored if never moved before.
     mLatestOldPos = QApplication::desktop()->availableGeometry( this ).topLeft();
@@ -58,25 +48,23 @@ cCustomMainWindowBase::cCustomMainWindowBase( QWidget *parent ) :
 
 
 //--------------------------------------------------------------------------------------
-//---------------------------------------------------- Internal Client Geometry Handling
-
-
+//--------------------------------------------------------- Internal Client Geometry API
 void
-cCustomMainWindowBase::SetCaptionHeight( int iValue )
+RCustomMainWindowBase::SetCaptionHeight( int iValue )
 {
     mCaptionHeight = iValue;
 }
 
 
 int
-cCustomMainWindowBase::GetCaptionHeight()
+RCustomMainWindowBase::GetCaptionHeight()  const
 {
     return  mCaptionHeight;
 }
 
 
 QRect
-cCustomMainWindowBase::CaptionGeometry()
+RCustomMainWindowBase::CaptionGeometry()  const
 {
     // Get Geometyry & Height of the title caption part, starting from top.
     int x = mOverrideContentsMargins.left();
@@ -86,7 +74,7 @@ cCustomMainWindowBase::CaptionGeometry()
 
 
 QRect
-cCustomMainWindowBase::ContentsGeometry()
+RCustomMainWindowBase::ContentsGeometry()  const
 {
     // Get Geometry of the contents part.
     int x = mOverrideContentsMargins.left();
@@ -96,22 +84,18 @@ cCustomMainWindowBase::ContentsGeometry()
 
 
 //--------------------------------------------------------------------------------------
-//--------------------------------------------- Custom Maximize behaviour implementation
-
-
+//----------------------------------------------- Custom Sizing behaviour implementation
 void
-cCustomMainWindowBase::Restore()
+RCustomMainWindowBase::Restore()
 {
     // Manual restore implementation
-
-    // The Regular way.
+    // First, the Regular way.
     showNormal();
 
-    // The Patch geometry handles cases where snap & maximize conflict.
-    // Is it really necessary ?
+    // This is not really necessary:
     //setGeometry( mRestoreGeometry );
 
-    // The patch Adjust which resets the flag & borders.
+    // The Patch geometry handles cases where snap & maximize conflict.
     AdjustWindowOnRestore();
 
     // The flag reset for consistency.
@@ -121,49 +105,40 @@ cCustomMainWindowBase::Restore()
 
 
 bool
-cCustomMainWindowBase::CheckCustomWindowMaximizedState()  const
+RCustomMainWindowBase::CheckCustomWindowMaximizedState()  const
 {
-    // Manual maximized state implementation check:
     return  mMaximized;
 }
 
 
 bool
-cCustomMainWindowBase::CheckCustomWindowResizingState()  const
+RCustomMainWindowBase::CheckCustomWindowResizingState()  const
 {
     return  mIsResizing;
 }
 
 
 //--------------------------------------------------------------------------------------
-//--------------------------------- Protected Non-Client OS behaviour handling overrides
-
-
+//----------------------------------------------- Protected Non-Client OS event handling
 bool
-cCustomMainWindowBase::NCHitCaption( const  QRect&  iRect, const  long iBorderWidth, long iX, long iY )
+RCustomMainWindowBase::NCHitCaption( const  QRect&  iRect, const  long iBorderWidth, long iX, long iY )
 {
-    // Transition implementation can be called or overriden in childs of this class.
-    // This one allows dragging only if caption geometry.
+    // This Transition implementation can be called or overriden in childs of this class.
+    // This one allows dragging only if inside caption geometry.
 
     // Custom processing for sending "hit caption" message to the OS
     // Return true:  the OS handles window move under mouse cursor like a native window
     // Return false: the mouse Events remain within the window
     int y = mOverrideContentsMargins.top();
-    bool  eligible = iY - y >= iRect.top() && iY - y < iRect.top() + GetCaptionHeight();
-
-    if(!eligible)
-        return  false;
-
-    return  true;
+    bool    elligible = iY - y >= iRect.top() && iY - y < iRect.top() + GetCaptionHeight();
+    return  elligible;
 }
 
 
 //--------------------------------------------------------------------------------------
 //--------------------------------------------------------- Protected Qt events override
-
-
 void
-cCustomMainWindowBase::resizeEvent( QResizeEvent* event )
+RCustomMainWindowBase::resizeEvent( QResizeEvent* event )
 {
     // Patch window behaviour and size on Maximize according to the available geometry
     mIsResizing = true;
@@ -185,7 +160,7 @@ cCustomMainWindowBase::resizeEvent( QResizeEvent* event )
 
 
 void
-cCustomMainWindowBase::moveEvent( QMoveEvent* event )
+RCustomMainWindowBase::moveEvent( QMoveEvent* event )
 {
     // Patch window behaviour and size on Maximize according to the available geometry
     QRect availableRect = QApplication::desktop()->availableGeometry( this );
@@ -198,7 +173,7 @@ cCustomMainWindowBase::moveEvent( QMoveEvent* event )
 
 
 void
-cCustomMainWindowBase::changeEvent(QEvent* event)
+RCustomMainWindowBase::changeEvent(QEvent* event)
 {
     // Regular processing anyways
     tSuperClass::changeEvent(event);
@@ -225,11 +200,9 @@ cCustomMainWindowBase::changeEvent(QEvent* event)
 
 
 //--------------------------------------------------------------------------------------
-//--------------------------------------------------------------- Window behaviour patch
-
-
+//---------------------------------------------------- Private Window behaviours patches
 void
-cCustomMainWindowBase::FixWindowOverlapOnMove()
+RCustomMainWindowBase::FixWindowOverlapOnMove()
 {
     // Collect screen & geometry information on move
     QRect availableRect = QApplication::desktop()->availableGeometry( this );
@@ -239,8 +212,8 @@ cCustomMainWindowBase::FixWindowOverlapOnMove()
     if( !thisRect.intersects( availableRect ) )
     {
         // We move the window in bounds
-        if( thisRect.bottom() < availableRect.top() )   move( thisRect.x(),                     availableRect.top()    + shift );
-        if( thisRect.top() > availableRect.bottom() )   move( thisRect.x(),                     availableRect.bottom() - shift );
+        if( thisRect.bottom() < availableRect.top() )   move( thisRect.x(), availableRect.top()    + shift );
+        if( thisRect.top() > availableRect.bottom() )   move( thisRect.x(), availableRect.bottom() - shift );
         if( thisRect.right() < availableRect.left() )   move( availableRect.left()    + shift,  thisRect.y() );
         if( thisRect.left() > availableRect.right() )   move( availableRect.right()   - shift,  thisRect.y() );
     }
@@ -248,7 +221,7 @@ cCustomMainWindowBase::FixWindowOverlapOnMove()
 
 
 void
-cCustomMainWindowBase::FixWindowOverlapOnResize( const  QSize&  iOldSize )
+RCustomMainWindowBase::FixWindowOverlapOnResize( const  QSize&  iOldSize )
 {
     // Collect screen & geometry information on resize 
     QRect availableRect = QApplication::desktop()->availableGeometry( this );
@@ -264,22 +237,22 @@ cCustomMainWindowBase::FixWindowOverlapOnResize( const  QSize&  iOldSize )
 
 
 void
-cCustomMainWindowBase::AdjustWindowOnMaximize()
+RCustomMainWindowBase::AdjustWindowOnMaximize()
 {
-    if(!isMaximized())
+    if( !isMaximized() )
         return;
 
-    // Hack to go around MinGW _WIN32_WINNT
-    int SM_CXPADDEDBORDER_code = 92;
-    const int x = GetSystemMetrics(SM_CXFRAME) + GetSystemMetrics(SM_CXPADDEDBORDER_code);
-    const int y = GetSystemMetrics(SM_CYFRAME) + GetSystemMetrics(SM_CXPADDEDBORDER_code);
+    // SM_CXFRAME SM_CYFRAME, The codes for GetSystemMetrics, border metrics
+    int quarterPounderWithCheese = 92; // SM_CXPADDEDBORDER
+    const int x = GetSystemMetrics( SM_CXFRAME ) + GetSystemMetrics( quarterPounderWithCheese );
+    const int y = GetSystemMetrics( SM_CYFRAME ) + GetSystemMetrics( quarterPounderWithCheese );
     mOverrideContentsMargins = QMargins( x, y, x, y );
 
     // Disable OS resize on border when maximized
     tSuperClass::SetBorderWidth( 0 );
 
-    // Set manual maximized state as the resizing done before disabled the os maximized flag.
-    mMaximized = true;
+    // Set manual states
+    mMaximized  = true;
     mIsResizing = false;
 
     setContentsMargins({x, y, x, y});
@@ -287,21 +260,22 @@ cCustomMainWindowBase::AdjustWindowOnMaximize()
 
 
 void
-cCustomMainWindowBase::AdjustWindowOnRestore()
+RCustomMainWindowBase::AdjustWindowOnRestore()
 {
-    // When not maximized, we make sure the border width
-    // telling the OS where to resize are reset to default
+    // When check for maximized from Qt method
     if( isMaximized() )
         return;
 
+    // Reset the override content margins storage
     mOverrideContentsMargins = QMargins( 0, 0, 0, 0 );
 
-    // Reset the OS resize on border
+    // Reset the OS border width.
     ResetBorderWidth();
 
-    // Remove the manual maximized flag
+    // Remove the manual maximized flag ( can be redundant but safe )
     mMaximized = false;
 
+    // Reset the content margins from Qt method
     setContentsMargins( { 0, 0, 0, 0 } );
 }
 

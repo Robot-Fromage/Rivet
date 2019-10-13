@@ -39,7 +39,7 @@ target_include_directories(
     PUBLIC
     "Rivet/Include/"
     PRIVATE
-    "Rivet/Source/Rivet/"
+    "Rivet/Source/"
 )
 
 # For MSVC parse pretty filter names
