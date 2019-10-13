@@ -63,9 +63,9 @@ private: void  Destroy();
 
 private:
     // Private Data Members
-    CustomButton*  mCloseButton;
-    CustomButton*  mMaximizeButton;
-    CustomButton*  mMinimizeButton;
+    RCustomButton*  mCloseButton;
+    RCustomButton*  mMaximizeButton;
+    RCustomButton*  mMinimizeButton;
 
     QColor  mActiveBackgroundColor;
     QColor  mInactiveBackgroundColor;

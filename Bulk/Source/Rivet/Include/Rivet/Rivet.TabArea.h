@@ -19,7 +19,7 @@
 
 
 // Rivet Forward declarations
-namespace  Rivet  { class  CustomButton; }
+namespace  Rivet  { class  RCustomButton; }
 
 
 // Qt Forward declarations
@@ -75,7 +75,7 @@ public:
     void            SetOverlap( int iValue );
     void            SetMaximumTabWidth( int iWidth );
     void            SetMinimumTabWidth( int iWidth );
-    void            SetTabsShapeStyle( Tab::eShapeStyle iValue );
+    void            SetTabsShapeStyle( Tab::eTabShape iValue );
     void            SetTabsClosable( bool iValue );
     void            SetTabsLiftable( bool iValue );
 
@@ -86,7 +86,7 @@ public:
     int                 GetMaximumTabWidth()    const;
     int                 GetMinimumTabWidth()    const;
     int                 GetTabWidth()           const;
-    Tab::eShapeStyle    GetTabsShapeStyle()     const;
+    Tab::eTabShape    GetTabsShapeStyle()     const;
     bool                GetTabsClosable()       const;
     bool                GetTabsLiftable()       const;
 
@@ -185,8 +185,8 @@ private:
     QScrollArea*                mScrollArea;
     QWidget*                    mScrollWidgetWrapper;
     QScroller*                  mScroller;
-    CustomButton*               mLeftButton;
-    CustomButton*               mRightButton;
+    RCustomButton*               mLeftButton;
+    RCustomButton*               mRightButton;
 
     // Size data
     int mTabWidth;
@@ -197,7 +197,7 @@ private:
     // Style Data
     QGraphicsDropShadowEffect*  mLeftDropShadowEffect;
     QGraphicsDropShadowEffect*  mRightDropShadowEffect;
-    Tab::eShapeStyle            mTabsShapeStyle;
+    Tab::eTabShape            mTabsShapeStyle;
     bool                        mTabsClosable;
     bool                        mTabsLiftable;
 

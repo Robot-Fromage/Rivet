@@ -21,7 +21,7 @@
 
 /* Rivet Forward declarations */
 namespace  Rivet  {  class  TabArea;  }
-namespace  Rivet  {  class  CustomButton;  }
+namespace  Rivet  {  class  RCustomButton;  }
 
 
 /* Qt Forward declarations */
@@ -51,7 +51,7 @@ class  Tab :
 ////////////////////////////////////////////////////////////////////////////////////////
 public:
     // Shape Style Enum
-enum class eShapeStyle
+enum class eTabShape
 {
     kLine,
     kBezier,
@@ -82,13 +82,13 @@ public:
 public:
     // Tab ColorStyle Interface Accessors
     void            SetTitle( const  QString&  iTitle );
-    void            SetShapeStyle( eShapeStyle iTabStyle );
+    void            SetTabShape( eTabShape iTabStyle );
     void            SetColor( const  QColor&  iColor );
     void            SetFadeColor( const  QColor& iColor );
 
     QString         GetTitle()          const;
     QString         GetTitleEllided()   const;
-    eShapeStyle     GetTabStyle()       const;
+    eTabShape     GetTabStyle()       const;
     const  QColor&  GetColor()          const;
     const  QColor&  GetFadeColor()      const;
 
@@ -174,7 +174,7 @@ signals:
 private:
     // Private Data Members
     QLabel*                     mTitleLabel;
-    CustomButton*               mCloseButton;
+    RCustomButton*               mCloseButton;
     QWidget*                    mInvisibleBackgroundRect;
 
     QString                     mTitleText;
@@ -189,7 +189,7 @@ private:
     QRect                       mAnimationTargetGeometry;
 
     // Style Data
-    eShapeStyle                 mTabStyle;
+    eTabShape                 mTabStyle;
     QColor                      mBaseColor;
     QColor                      mFadeColor;
     int                         mSlopePadding;

@@ -23,8 +23,8 @@ namespace  Rivet
 //--------------------------------------------------------------- Default values defines
 
 
-#define  DEFAULT_ACTIVE_BACKGROUND_COLOR QColor( 50, 50, 50 )
-#define  DEFAULT_INACTIVE_BACKGROUND_COLOR QColor( 30, 30, 30 )
+#define  DEFAULT_ACTIVE_BACKGROUND_COLOR QColor( 0, 0, 0, 127 )
+#define  DEFAULT_INACTIVE_BACKGROUND_COLOR QColor( 0, 0, 0, 50 )
 
 
 //--------------------------------------------------------------------------------------
@@ -163,18 +163,18 @@ DefaultCaption::resizeEvent( QResizeEvent *event )
 void
 DefaultCaption::Init()
 {
-    if( !mCloseButton )     mCloseButton    = new  CustomButton( this );
-    if( !mMaximizeButton )  mMaximizeButton = new  CustomButton( this );
-    if( !mMinimizeButton )  mMinimizeButton = new  CustomButton( this );
+    if( !mCloseButton )     mCloseButton    = new  RCustomButton( this );
+    if( !mMaximizeButton )  mMaximizeButton = new  RCustomButton( this );
+    if( !mMinimizeButton )  mMinimizeButton = new  RCustomButton( this );
 }
 
 
 void
 DefaultCaption::Build()
 {
-    mCloseButton->SetShape( CustomButton::eShape::kClose );
-    mMaximizeButton->SetShape( CustomButton::eShape::kMaximize );
-    mMinimizeButton->SetShape( CustomButton::eShape::kMinimize );
+    mCloseButton->SetIconShape( RCustomButton::eButtonIconShape::kClose );
+    mMaximizeButton->SetIconShape( RCustomButton::eButtonIconShape::kMaximize );
+    mMinimizeButton->SetIconShape( RCustomButton::eButtonIconShape::kMinimize );
 
     mCloseButton->SetHoveredBackgroundColor( QColor( 230, 20, 35 ) );
 

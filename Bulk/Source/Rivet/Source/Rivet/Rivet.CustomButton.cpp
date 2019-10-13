@@ -1,73 +1,59 @@
-/*************************************************************************
+/**
 *
 *   Rivet
 *__________________
 *
-* Rivet.CustomButton.cpp
-* 8-9-2018 21:04 GMT+1
-* Clement Berthaud - Layl
-* Please refer to LICENSE.TXT
+* @file     Rivet.CustomButton.cpp
+* @author   Clement Berthaud
+* @brief    This file profides the definition for the RCustomButton class.
 */
-
 #include "Rivet/Rivet.CustomButton.h"
-
-
 #include <QPainter>
 #include <QMouseEvent>
 
-
-namespace  Rivet
-{
-
-
+namespace  Rivet {
 //--------------------------------------------------------------------------------------
 //--------------------------------------------------------------- Default Values Defines
-
-
 #define  DEFAULT_BG_COLOR                   QColor( 0, 0, 0, 0 )
 #define  DEFAULT_HOVER_BG_COLOR             QColor( 255, 255, 255, 127 )
 #define  DEFAULT_PRESSED_BG_COLOR           QColor( 0, 0, 0, 127 )
 #define  DEFAULT_PRESSED_HOVERED_BG_COLOR   QColor( 0, 0, 0, 127 )
-#define  DEFAULT_SHAPE                      eShape::kNone
+#define  DEFAULT_SHAPE                      eButtonIconShape::kNone
 #define  DEFAULT_COLOR                      QColor( 255, 255, 255, 255 )
 #define  DEFAULT_SIZE                       7
-#define  DEFAULT_BACKGROUND                 eBackground::kSquare
+#define  DEFAULT_BACKGROUND                 eButtonBackgroundShape::kSquare
 
 
 //--------------------------------------------------------------------------------------
 //----------------------------------------------------------- Construction / Destruction
-
-
-CustomButton::~CustomButton()
+RCustomButton::~RCustomButton()
 {
 }
 
 
-CustomButton::CustomButton(QWidget *parent) :
-    tSuperClass(                parent ),
-    mHovered(               false ),
-    mPressed(               false ),
-    mBgColor(               DEFAULT_BG_COLOR ),
-    mHoveredBgColor(        DEFAULT_HOVER_BG_COLOR ),
-    mPressedBgColor(        DEFAULT_PRESSED_BG_COLOR ),
-    mPressedHoveredBgColor( DEFAULT_PRESSED_HOVERED_BG_COLOR ),
-    mColor(                 DEFAULT_COLOR ),
-    mHoveredColor(          DEFAULT_COLOR ),
-    mPressedColor(          DEFAULT_COLOR ),
-    mPressedHoveredColor(   DEFAULT_COLOR ),
-    mShape(                 DEFAULT_SHAPE ),
-    mSize(                  DEFAULT_SIZE ),
-    mBackground(            DEFAULT_BACKGROUND )
+RCustomButton::RCustomButton(QWidget *parent)
+    : tSuperClass(              parent                              )
+    , mHovered(                 false                               )
+    , mPressed(                 false                               )
+    , mBgColor(                 DEFAULT_BG_COLOR                    )
+    , mHoveredBgColor(          DEFAULT_HOVER_BG_COLOR              )
+    , mPressedBgColor(          DEFAULT_PRESSED_BG_COLOR            )
+    , mPressedHoveredBgColor(   DEFAULT_PRESSED_HOVERED_BG_COLOR    )
+    , mColor(                   DEFAULT_COLOR                       )
+    , mHoveredColor(            DEFAULT_COLOR                       )
+    , mPressedColor(            DEFAULT_COLOR                       )
+    , mPressedHoveredColor(     DEFAULT_COLOR                       )
+    , mIconShape(               DEFAULT_SHAPE                       )
+    , mBackgroundShape(         DEFAULT_BACKGROUND                  )
+    , mIconSize(                DEFAULT_SIZE                        )
 {
 }
 
 
 //--------------------------------------------------------------------------------------
 //--------------------------------------------------------- Public Style Setup Accessors
-
-
 void
-CustomButton::SetBackgroundColor( const  QColor&  iColor )
+RCustomButton::SetBackgroundColor( const  QColor&  iColor )
 {
     mBgColor = iColor;
     repaint();
@@ -75,7 +61,7 @@ CustomButton::SetBackgroundColor( const  QColor&  iColor )
 
 
 void
-CustomButton::SetHoveredBackgroundColor( const  QColor&  iColor )
+RCustomButton::SetHoveredBackgroundColor( const  QColor&  iColor )
 {
     mHoveredBgColor = iColor;
     repaint();
@@ -83,7 +69,7 @@ CustomButton::SetHoveredBackgroundColor( const  QColor&  iColor )
 
 
 void
-CustomButton::SetPressedBackgroundColor( const  QColor&  iColor )
+RCustomButton::SetPressedBackgroundColor( const  QColor&  iColor )
 {
     mPressedBgColor = iColor;
     mPressedHoveredBgColor = iColor;
@@ -92,28 +78,28 @@ CustomButton::SetPressedBackgroundColor( const  QColor&  iColor )
 
 
 const  QColor&
-CustomButton::GetBackgroundColor()  const
+RCustomButton::GetBackgroundColor()  const
 {
     return  mBgColor;
 }
 
 
 const  QColor&
-CustomButton::GetHoveredBackgroundColor()  const
+RCustomButton::GetHoveredBackgroundColor()  const
 {
     return  mHoveredBgColor;
 }
 
 
 const  QColor&
-CustomButton::GetPressedBackgroundColor()  const
+RCustomButton::GetPressedBackgroundColor()  const
 {
     return  mPressedBgColor;
 }
 
 
 void
-CustomButton::SetColor( const  QColor&  iColor )
+RCustomButton::SetColor( const  QColor&  iColor )
 {
     mColor = iColor;
     repaint();
@@ -121,7 +107,7 @@ CustomButton::SetColor( const  QColor&  iColor )
 
 
 void
-CustomButton::SetHoveredColor( const  QColor&  iColor )
+RCustomButton::SetHoveredColor( const  QColor&  iColor )
 {
     mHoveredColor = iColor;
     repaint();
@@ -129,7 +115,7 @@ CustomButton::SetHoveredColor( const  QColor&  iColor )
 
 
 void
-CustomButton::SetPressedColor( const  QColor&  iColor )
+RCustomButton::SetPressedColor( const  QColor&  iColor )
 {
     mPressedColor = iColor;
     mPressedHoveredColor = iColor;
@@ -138,83 +124,81 @@ CustomButton::SetPressedColor( const  QColor&  iColor )
 
 
 const  QColor&
-CustomButton::GetColor()  const
+RCustomButton::GetColor()  const
 {
     return  mColor;
 }
 
 
 const  QColor&
-CustomButton::GetHoveredColor()  const
+RCustomButton::GetHoveredColor()  const
 {
     return  mHoveredColor;
 }
 
 
 const  QColor&
-CustomButton::GetPressedColor()  const
+RCustomButton::GetPressedColor()  const
 {
     return  mPressedColor;
 }
 
 
 void
-CustomButton::SetShape( const  eShape&  iShape )
+RCustomButton::SetIconShape( const  eButtonIconShape&  iShape )
 {
-    mShape = iShape;
+    mIconShape = iShape;
     repaint();
 }
 
 
-const  CustomButton::eShape&
-CustomButton::GetShape()  const
+const  RCustomButton::eButtonIconShape&
+RCustomButton::GetShape()  const
 {
-    return  mShape;
+    return  mIconShape;
 }
 
 
 void
-CustomButton::SetBackgroundShape( const  eBackground&  iShape )
+RCustomButton::SetBackgroundShape( const  eButtonBackgroundShape&  iShape )
 {
-    mBackground = iShape;
+    mBackgroundShape = iShape;
 }
 
 
-const  CustomButton::eBackground&
-CustomButton::GetBackgroundShape()  const
+const  RCustomButton::eButtonBackgroundShape&
+RCustomButton::GetBackgroundShape()  const
 {
-    return  mBackground;
+    return  mBackgroundShape;
 }
 
 
 void
-CustomButton::SetSize( int iSize )
+RCustomButton::SetIconSize( int iSize )
 {
-    mSize = iSize;
+    mIconSize = iSize;
     repaint();
 }
 
 
 int
-CustomButton::GetSize()  const
+RCustomButton::GetIconSize()  const
 {
-    return  mSize;
+    return  mIconSize;
 }
 
 
 //--------------------------------------------------------------------------------------
-//--------------------------------------------------------- Protected Qt event overrides
-
-
+//--------------------------------------------------------------- Public State Accessors
 bool
-CustomButton::IsHovered()
+RCustomButton::IsHovered()
 {
     return  mPressed;
 }
 
 
 bool
-CustomButton::IsPressed()
+RCustomButton::IsPressed()
 {
     return  mHovered;
 }
@@ -222,10 +206,8 @@ CustomButton::IsPressed()
 
 //--------------------------------------------------------------------------------------
 //--------------------------------------------------------- Protected Qt event overrides
-
-
 void
-CustomButton::enterEvent( QEvent* event )
+RCustomButton::enterEvent( QEvent* event )
 {
     tSuperClass::enterEvent( event );
 
@@ -235,7 +217,7 @@ CustomButton::enterEvent( QEvent* event )
 
 
 void
-CustomButton::leaveEvent( QEvent* event )
+RCustomButton::leaveEvent( QEvent* event )
 {
     tSuperClass::leaveEvent( event );
 
@@ -245,7 +227,7 @@ CustomButton::leaveEvent( QEvent* event )
 
 
 void
-CustomButton::mousePressEvent( QMouseEvent* event )
+RCustomButton::mousePressEvent( QMouseEvent* event )
 {
     tSuperClass::mousePressEvent( event );
 
@@ -258,7 +240,7 @@ CustomButton::mousePressEvent( QMouseEvent* event )
 
 
 void
-CustomButton::mouseReleaseEvent( QMouseEvent* event )
+RCustomButton::mouseReleaseEvent( QMouseEvent* event )
 {
     tSuperClass::mouseReleaseEvent( event );
 
@@ -268,17 +250,17 @@ CustomButton::mouseReleaseEvent( QMouseEvent* event )
 
 
 void
-CustomButton::mouseDoubleClickEvent( QMouseEvent* event )
+RCustomButton::mouseDoubleClickEvent( QMouseEvent* event )
 {
     emit  DoubleClicked();
 }
 
 
 void
-CustomButton::paintEvent( QPaintEvent* event )
+RCustomButton::paintEvent( QPaintEvent* event )
 {
     /*
-    // Apply style sheet drawing on this before all
+    // [DEPRECATED] Apply style sheet drawing on this before all
     QStyleOption opt;
     opt.init(this);
     QPainter p(this);
@@ -288,7 +270,6 @@ CustomButton::paintEvent( QPaintEvent* event )
     // Then use custom painting
     QPainter painter(this);
     painter.setRenderHint( QPainter::Antialiasing, false );
-
     eButtonState flag = static_cast< eButtonState >( int( mHovered ) | ( int( mPressed ) << 1 ) );
     QColor currentBackgroundColor = QColor( 0, 0, 0, 0 );
     QColor currentColor = QColor( 255, 255, 255, 255 );
@@ -331,9 +312,9 @@ CustomButton::paintEvent( QPaintEvent* event )
 
     }
 
-    switch( mBackground )
+    switch( mBackgroundShape )
     {
-        case  eBackground::kSquare :
+        case  eButtonBackgroundShape::kSquare :
         {
             painter.setRenderHint( QPainter::Antialiasing, false );
             painter.setBrush( currentBackgroundColor );
@@ -343,7 +324,7 @@ CustomButton::paintEvent( QPaintEvent* event )
             break;
         }
 
-        case  eBackground::kDisk :
+        case  eButtonBackgroundShape::kDisk :
         {
             painter.setRenderHint( QPainter::Antialiasing, true );
             painter.setBrush( currentBackgroundColor );
@@ -357,7 +338,7 @@ CustomButton::paintEvent( QPaintEvent* event )
     painter.setBrush( Qt::NoBrush );
     painter.setPen( QPen( currentColor, 1, Qt::SolidLine, Qt::FlatCap, Qt::MiterJoin ) );
 
-    int s2 = mSize / 2;
+    int s2 = mIconSize / 2;
     auto hs = size() / 2;
     QPoint center = QPoint( hs.width(), hs.height() );
     QPoint refPointA( center + QPoint( -s2, -s2 ) );
@@ -365,22 +346,22 @@ CustomButton::paintEvent( QPaintEvent* event )
     QPoint refPointC( center + QPoint( +s2, +s2 ) );
     QPoint refPointD( center + QPoint( -s2, +s2 ) );
 
-    switch( mShape )
+    switch( mIconShape )
     {
-        case eShape::kNone :
+        case eButtonIconShape::kNone :
         {
             // Default drawing ?
             break;
         }
 
-        case eShape::kClose :
+        case eButtonIconShape::kClose :
         {
             painter.drawLine( refPointA, refPointC + QPoint( +1, +1 ) );
             painter.drawLine( refPointD, refPointB + QPoint( +1, -1 ) );
             break;
         }
 
-        case eShape::kMaximize :
+        case eButtonIconShape::kMaximize :
         {
             painter.drawLine( refPointA, refPointB );
             painter.drawLine( refPointB, refPointC + QPoint( +1, +1 ) );
@@ -389,13 +370,13 @@ CustomButton::paintEvent( QPaintEvent* event )
             break;
         }
 
-        case eShape::kMinimize :
+        case eButtonIconShape::kMinimize :
         {
             painter.drawLine( ( refPointA + refPointD ) / 2, ( refPointB + refPointC ) / 2 );
             break;
         }
 
-        case eShape::kLeftArrow :
+        case eButtonIconShape::kLeftArrow :
         {
             painter.setRenderHint( QPainter::Antialiasing, true );
             QPainterPath bezierPath;
@@ -403,12 +384,13 @@ CustomButton::paintEvent( QPaintEvent* event )
             bezierPath.lineTo( refPointB );
             bezierPath.lineTo( refPointC );
             bezierPath.closeSubpath();
+            // Disabled fill:
             //painter.setBrush( currentColor );
             painter.drawPath( bezierPath );
             break;
         }
 
-        case eShape::kRightArrow :
+        case eButtonIconShape::kRightArrow :
         {
             painter.setRenderHint( QPainter::Antialiasing, true );
             QPainterPath bezierPath;
@@ -416,6 +398,7 @@ CustomButton::paintEvent( QPaintEvent* event )
             bezierPath.lineTo( refPointD );
             bezierPath.lineTo( refPointA );
             bezierPath.closeSubpath();
+            // Disabled fill:
             //painter.setBrush( currentColor );
             painter.drawPath( bezierPath );
             break;

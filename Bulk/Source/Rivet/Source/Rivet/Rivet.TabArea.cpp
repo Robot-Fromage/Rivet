@@ -46,7 +46,7 @@
 #define DEFAULT_WHEEL_TIME          50
 #define DEFAULT_NAV_TIME            200
 #define DEFAULT_ENSURE_TIME         250
-#define DEFAULT_TABS_STYLE          Tab::eShapeStyle::kBezier
+#define DEFAULT_TABS_STYLE          Tab::eTabShape::kBezier
 
 
 #define DEFAULT_NAV_WORK_FPS        60
@@ -249,7 +249,7 @@ TabArea::ManualAddNewTab( Tab* iTab )
 
     iTab->SetClosable( mTabsClosable );
     iTab->SetLiftable( mTabsLiftable );
-    iTab->SetShapeStyle( mTabsShapeStyle );
+    iTab->SetTabShape( mTabsShapeStyle );
     iTab->SetOnTabDroppedOutCB( mOnTabDroppedOutCB );
     iTab->SetTag( mTag );
 
@@ -285,7 +285,7 @@ TabArea::DockHere( Tab* iTab )
 
     iTab->SetClosable( mTabsClosable );
     iTab->SetLiftable( mTabsLiftable );
-    iTab->SetShapeStyle( mTabsShapeStyle );
+    iTab->SetTabShape( mTabsShapeStyle );
     iTab->SetOnTabDroppedOutCB( mOnTabDroppedOutCB );
 
     if( iTab->GetLinkWidget() )
@@ -453,11 +453,11 @@ TabArea::SetMinimumTabWidth( int iWidth )
 
 
 void
-TabArea::SetTabsShapeStyle( Tab::eShapeStyle iValue )
+TabArea::SetTabsShapeStyle( Tab::eTabShape iValue )
 {
     mTabsShapeStyle = iValue;
     for ( Tab* t : mDomesticTabs )
-        t->SetShapeStyle( iValue );
+        t->SetTabShape( iValue );
 }
 
 
@@ -521,7 +521,7 @@ TabArea::GetTabWidth()  const
     return  mTabWidth;
 }
 
-Tab::eShapeStyle
+Tab::eTabShape
 TabArea::GetTabsShapeStyle()  const
 {
     return  mTabsShapeStyle;
@@ -722,8 +722,8 @@ TabArea::Init()
 {
     if( !mScrollArea )              mScrollArea             = new  QScrollArea( this );
     if( !mScrollWidgetWrapper )     mScrollWidgetWrapper    = new  QWidget( this );
-    if( !mLeftButton )              mLeftButton             = new  CustomButton( this );
-    if( !mRightButton )             mRightButton            = new  CustomButton( this );
+    if( !mLeftButton )              mLeftButton             = new  RCustomButton( this );
+    if( !mRightButton )             mRightButton            = new  RCustomButton( this );
     if( !mLeftDropShadowEffect )    mLeftDropShadowEffect   = new  QGraphicsDropShadowEffect( this );
     if( !mRightDropShadowEffect )   mRightDropShadowEffect  = new  QGraphicsDropShadowEffect( this );
     if( !mNavTimerLeft )            mNavTimerLeft           = new  QTimer( this );
@@ -758,8 +758,8 @@ TabArea::Build()
                     "QScrollArea > QWidget > QWidget { background: transparent; border: none; }"
                     "QScrollArea > QWidget > QScrollBar { background: palette(base); border: none; }" );
 
-    mRightButton->SetShape( CustomButton::eShape::kRightArrow );
-    mLeftButton->SetShape( CustomButton::eShape::kLeftArrow );
+    mRightButton->SetIconShape( RCustomButton::eButtonIconShape::kRightArrow );
+    mLeftButton->SetIconShape( RCustomButton::eButtonIconShape::kLeftArrow );
 
     // Temporary debug stylesheet should move to a qss separate file.
     /*
@@ -910,7 +910,7 @@ TabArea::_NewTab()
     QString title = QString( "Screen #" ) + QString::number( count );
     newTab->SetTitle( title );
     newTab->SetColor( _NextDefaultColor() );
-    newTab->SetShapeStyle( mTabs_Style );
+    newTab->SetTabShape( mTabs_Style );
 
     // Important !! Setup lifted connection signal.
     QObject::connect( newTab, SIGNAL( Lifted( Tab* ) ), this, SLOT( DomesticTabLifted( Tab* ) ) );

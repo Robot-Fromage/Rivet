@@ -32,7 +32,7 @@
 //--------------------------------------------------------------- Default values defines
 
 
-#define  DEFAULT_TAB_STYLE                  eShapeStyle::kBezier
+#define  DEFAULT_TAB_STYLE                  eTabShape::kBezier
 #define  DEFAULT_BASE_COLOR                 QColor( 53, 53, 53, 255 )
 #define  DEFAULT_FADE_COLOR                 QColor( 45, 45, 45, 127 )
 #define  DEFAULT_TEXT_COLOR                 QColor( 255, 255, 255, 255 )
@@ -220,7 +220,7 @@ Tab::SetTitle( const  QString&  iTitle )
 
 
 void
-Tab::SetShapeStyle( eShapeStyle iTabStyle )
+Tab::SetTabShape( eTabShape iTabStyle )
 {
     mTabStyle = iTabStyle;
     repaint();
@@ -278,7 +278,7 @@ Tab::GetTitleEllided()  const
 }
 
 
-Tab::eShapeStyle
+Tab::eTabShape
 Tab::GetTabStyle()  const
 {
     return  mTabStyle;
@@ -613,7 +613,7 @@ Tab::paintEvent( QPaintEvent* event )
     {
         switch( mTabStyle )
         {
-            case  eShapeStyle::kLine:
+            case  eTabShape::kLine:
             {
                 painter.setRenderHint( QPainter::Antialiasing, true );
                 bezierPath.moveTo( 0, h );
@@ -623,7 +623,7 @@ Tab::paintEvent( QPaintEvent* event )
                 break;
             }
 
-            case  eShapeStyle::kBezier:
+            case  eTabShape::kBezier:
             {
                 painter.setRenderHint( QPainter::Antialiasing, true );
                 bezierPath.moveTo( 0, h );
@@ -633,7 +633,7 @@ Tab::paintEvent( QPaintEvent* event )
                 break;
             }
 
-            case  eShapeStyle::kRect:
+            case  eTabShape::kRect:
             {
                 painter.setRenderHint( QPainter::Antialiasing, false );
                 bezierPath.moveTo( 0, h );
@@ -643,7 +643,7 @@ Tab::paintEvent( QPaintEvent* event )
                 break;
             }
 
-            case  eShapeStyle::kRect_Line:
+            case  eTabShape::kRect_Line:
             {
                 painter.setRenderHint( QPainter::Antialiasing, false );
                 bezierPath.moveTo( 0, h );
@@ -706,7 +706,7 @@ Tab::Init()
 {
     if( !mInvisibleBackgroundRect )     mInvisibleBackgroundRect    = new QWidget( this );
     if( !mTitleLabel )                  mTitleLabel                 = new QLabel( this );
-    if( !mCloseButton )                 mCloseButton                = new CustomButton( this );
+    if( !mCloseButton )                 mCloseButton                = new RCustomButton( this );
 }
 
 
@@ -728,11 +728,11 @@ Tab::Build()
     mTitleLabel->setStyleSheet( "color: rgb( 255, 255, 255 ); background:transparent; border: none;" );
 
     // Setting up close button properties
-    mCloseButton->SetShape( CustomButton::eShape::kClose );
-    mCloseButton->SetBackgroundShape( CustomButton::eBackground::kDisk );
+    mCloseButton->SetIconShape( RCustomButton::eButtonIconShape::kClose );
+    mCloseButton->SetBackgroundShape( RCustomButton::eButtonBackgroundShape::kDisk );
     mCloseButton->SetHoveredBackgroundColor( QColor( 127, 127, 127, 80 ) );
     mCloseButton->SetPressedBackgroundColor( QColor( 0, 0, 0, 80 ) );
-    mCloseButton->SetSize( 5 );
+    mCloseButton->SetIconSize( 5 );
 
     // Drop shadow behind tab when docked
     mGlobalDropShadowEffect = new QGraphicsDropShadowEffect( this );
@@ -772,8 +772,8 @@ Tab::Compose()
 
     // Computing different positions according to the current tab style.
     int shift = 1;
-            if( mTabStyle == eShapeStyle::kLine )      shift = 3;
-    else    if( mTabStyle == eShapeStyle::kBezier )    shift = 4;
+            if( mTabStyle == eTabShape::kLine )      shift = 3;
+    else    if( mTabStyle == eTabShape::kBezier )    shift = 4;
 
     btnPosition.setX( btnPosition.x() - buttonPadding * shift );
 
@@ -791,7 +791,6 @@ Tab::Compose()
 void
 Tab::Destroy()
 {
-
     delete  mTitleDropShadowEffect;
     delete  mGlobalDropShadowEffect;
     delete  mOpacityEffect;
