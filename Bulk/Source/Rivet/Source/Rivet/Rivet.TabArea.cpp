@@ -98,7 +98,7 @@ _NextDefaultColor()
 //-------------------------------------- Static functions & tools for sorting & ordering
 
 
-struct TabOrderingPair
+struct FTabOrderingPair
 {
     QRect  mGeometry;
     ::Rivet::RTab*    mTab;
@@ -107,7 +107,7 @@ struct TabOrderingPair
 
 static
 bool
-SortBasic( const  TabOrderingPair& iA, const  TabOrderingPair& iB )
+SortBasic( const  FTabOrderingPair& iA, const  FTabOrderingPair& iB )
 {
     int termA = iA.mGeometry.x(); // semantic comparision element for A
     int termB = iB.mGeometry.x(); // semantic comparision element for B
@@ -1086,11 +1086,11 @@ RTabArea::ProcessCandidateDragHover()
     // Collect tab geometry from global, expressed in the same frame of ref as other tabs in this area.
     QRect tabGeometry = ::Rivet::__private__::MapRectFromGlobal( mScrollWidgetWrapper, mCandidateTab->geometry() );
 
-    QVector< TabOrderingPair > orderingVector;
+    QVector< FTabOrderingPair > orderingVector;
     for( RTab* t : mDomesticTabs )
-        orderingVector.append( TabOrderingPair( { t->TargetGeometry(), t } ) );
+        orderingVector.append( FTabOrderingPair( { t->TargetGeometry(), t } ) );
 
-    orderingVector.append( TabOrderingPair( { tabGeometry, mCandidateTab } ) );
+    orderingVector.append( FTabOrderingPair( { tabGeometry, mCandidateTab } ) );
     qSort( orderingVector.begin(), orderingVector.end(), SortBasic );
 
     // After sort, process ordering.

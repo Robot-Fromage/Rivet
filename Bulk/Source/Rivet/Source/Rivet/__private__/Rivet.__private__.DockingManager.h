@@ -30,7 +30,7 @@ namespace  __private__
 {
 
 
-class cDockingManager :
+class FDockingManager :
     public  QObject
 {
     Q_OBJECT
@@ -40,15 +40,15 @@ class cDockingManager :
 ////////////////////////////////////////////////////////////////////////////////////////
 private:
     // Construction / Destruction
-    virtual  ~cDockingManager();
-    cDockingManager();
+    virtual  ~FDockingManager();
+    FDockingManager();
 
 ////////////////////////////////////////////////////////////////////////////////////////
 ////                            PUBLIC SINGLETON API                                ////
 ////////////////////////////////////////////////////////////////////////////////////////
 public:
     // Singleton Accessor
-    static  cDockingManager*  DockingManager();
+    static  FDockingManager*  DockingManager();
 
 
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -110,7 +110,7 @@ private:
 ////                            PUBLIC SINGLETON API                                ////
 ////////////////////////////////////////////////////////////////////////////////////////
 // External Conveniency Singleton Accessor
-::Rivet::__private__::cDockingManager*  DockingManager();
+::Rivet::__private__::FDockingManager*  DockingManager();
 
 
 } // namespace  Rivet

@@ -31,24 +31,24 @@ typedef struct {
     int accentFlags;
     int gradientColor;
     int invalidState;
-} DWMACCENTPOLICY;
+} _DWMACCENTPOLICY;
 
 
 typedef struct _WINCOMPATTR_DATA {
-    DWMACCENTPOLICY AccentPolicy;
+    _DWMACCENTPOLICY AccentPolicy;
 } WINCOMPATTR_DATA;
 
 
-typedef struct tagWINCOMPATTR
+typedef struct _tagWINCOMPATTR
 {
     DWORD attribute; // the attribute to query
     WINCOMPATTR_DATA *pData; // buffer to store the result
     ULONG dataSize; // size of the pData buffer
-} WINCOMPATTR;
+} _WINCOMPATTR;
 
 
 // Non-documented windows API function & flags for enabling glass windows starting from windows 8
-static HRESULT (WINAPI * _pSetWindowCompositionAttribute)(HWND, WINCOMPATTR *) = 0;
+static HRESULT (WINAPI * _pSetWindowCompositionAttribute)(HWND, _WINCOMPATTR *) = 0;
 static const DWORD _WCA_ACCENT_POLICY = 19;
 static const auto _dropShadowFlag = 0x20 | 0x40 | 0x80 | 0x100;
 
@@ -113,14 +113,14 @@ EnableGlassForWindow8OrGreater( HWND iWindow )
 
     HMODULE user32 = _load_sys_library(L"user32.dll");
     if (user32)
-        _pSetWindowCompositionAttribute = (HRESULT(WINAPI*)(HWND, WINCOMPATTR*))GetProcAddress( user32, "SetWindowCompositionAttribute" );
+        _pSetWindowCompositionAttribute = (HRESULT(WINAPI*)(HWND, _WINCOMPATTR*))GetProcAddress( user32, "SetWindowCompositionAttribute" );
     else
         return  false;  // Fail, function is not available. This undocumented function may have been moved somewhere else.
 
     //DWMACCENTPOLICY policy = { ACCENT_ENABLE_BLURBEHIND , _dropShadowFlag, 0, 0 };
-    DWMACCENTPOLICY policy = { ACCENT_ENABLE_BLURBEHIND , 0, 0, 0 }; // Without drop shadow
+    _DWMACCENTPOLICY policy = { ACCENT_ENABLE_BLURBEHIND , 0, 0, 0 }; // Without drop shadow
 
-    WINCOMPATTR data = { _WCA_ACCENT_POLICY, (WINCOMPATTR_DATA*)&policy, sizeof(WINCOMPATTR_DATA) };
+    _WINCOMPATTR data = { _WCA_ACCENT_POLICY, (WINCOMPATTR_DATA*)&policy, sizeof(WINCOMPATTR_DATA) };
     _pSetWindowCompositionAttribute( iWindow, &data );
 
     return  true;  // Success
@@ -133,14 +133,14 @@ DisableGlassForWindow8OrGreater( HWND iWindow )
 
     HMODULE user32 = _load_sys_library(L"user32.dll");
     if (user32)
-        _pSetWindowCompositionAttribute = (HRESULT(WINAPI*)(HWND, WINCOMPATTR*))GetProcAddress( user32, "SetWindowCompositionAttribute" );
+        _pSetWindowCompositionAttribute = (HRESULT(WINAPI*)(HWND, _WINCOMPATTR*))GetProcAddress( user32, "SetWindowCompositionAttribute" );
     else
         return  false;  // Fail, function is not available. This undocumented function may have been moved somewhere else.
 
-    DWMACCENTPOLICY policy = { ACCENT_DISABLED, _dropShadowFlag, 0, 0 };
+    _DWMACCENTPOLICY policy = { ACCENT_DISABLED, _dropShadowFlag, 0, 0 };
     //DWMACCENTPOLICY policy = { ACCENT_ENABLE_BLURBEHIND , 0, 0, 0 }; // Without drop shadow
 
-    WINCOMPATTR data = { _WCA_ACCENT_POLICY, (WINCOMPATTR_DATA*)&policy, sizeof(WINCOMPATTR_DATA) };
+    _WINCOMPATTR data = { _WCA_ACCENT_POLICY, (WINCOMPATTR_DATA*)&policy, sizeof(WINCOMPATTR_DATA) };
     _pSetWindowCompositionAttribute( iWindow, &data );
 
     return  true;  // Success

@@ -33,14 +33,14 @@
 //------------------------------------------------- Static functions & tools for sorting
 
 
-struct  cHWNDZOrderingPair
+struct  FZOrderingPair
 {
     int zOrder;
     ::Rivet::RTabArea* area;
 };
 
 // Struct for ordering and selecting area while dragging
-struct cElligibleArea
+struct FElligibleArea
 {
     ::Rivet::RTabArea*  mArea;
     QRegion   mRegion;
@@ -48,7 +48,7 @@ struct cElligibleArea
 
 static
 bool
-SortZ( const  cHWNDZOrderingPair& iA, const  cHWNDZOrderingPair& iB )
+SortZ( const  FZOrderingPair& iA, const  FZOrderingPair& iB )
 {
     return  iA.zOrder < iB.zOrder;
 }
@@ -67,12 +67,12 @@ namespace  __private__
 //----------------------------------------------------------- Construction / Destruction
 
 
-cDockingManager::~cDockingManager()
+FDockingManager::~FDockingManager()
 {
 }
 
 
-cDockingManager::cDockingManager() :
+FDockingManager::FDockingManager() :
     mCurrentDraggingTab( NULL ),
     mCurrentTargetArea( NULL ),
     mLastLiftedFrom( NULL )
@@ -88,13 +88,13 @@ cDockingManager::cDockingManager() :
 
 
 // static
-cDockingManager*
-cDockingManager::DockingManager()
+FDockingManager*
+FDockingManager::DockingManager()
 {
-    static  cDockingManager*  sgDockingManager = 0;
+    static  FDockingManager*  sgDockingManager = 0;
 
     if( !sgDockingManager )
-        sgDockingManager = new  cDockingManager();
+        sgDockingManager = new  FDockingManager();
 
     return  sgDockingManager;
 }
@@ -106,28 +106,28 @@ cDockingManager::DockingManager()
 
 
 RTab*
-cDockingManager::CurrentDraggingTab()  const
+FDockingManager::CurrentDraggingTab()  const
 {
     return  mCurrentDraggingTab;
 }
 
 
 RTabArea*
-cDockingManager::CurrentTargetArea()  const
+FDockingManager::CurrentTargetArea()  const
 {
     return  mCurrentTargetArea;
 }
 
 
 void
-cDockingManager::SetLastLiftedFrom( RTabArea* iValue )
+FDockingManager::SetLastLiftedFrom( RTabArea* iValue )
 {
     mLastLiftedFrom = iValue;
 }
 
 
 RTabArea*
-cDockingManager::GetLastLiftedFrom()  const
+FDockingManager::GetLastLiftedFrom()  const
 {
     return  mLastLiftedFrom;
 }
@@ -140,28 +140,28 @@ cDockingManager::GetLastLiftedFrom()  const
 
 
 void
-cDockingManager::RegisterTabArea( RTabArea* iTabArea )
+FDockingManager::RegisterTabArea( RTabArea* iTabArea )
 {
     mTabAreaList.append( iTabArea );
 }
 
 
 void
-cDockingManager::UnregisterTabArea( RTabArea* iTabArea )
+FDockingManager::UnregisterTabArea( RTabArea* iTabArea )
 {
     mTabAreaList.removeAll( iTabArea );
 }
 
 
 void
-cDockingManager::RegisterTab( RTab* iTab )
+FDockingManager::RegisterTab( RTab* iTab )
 {
     InitConnectionsForTab( iTab );
 }
 
 
 void
-cDockingManager::UnregisterTab( RTab* iTab )
+FDockingManager::UnregisterTab( RTab* iTab )
 {
     DestroyConnectionsForTab( iTab );
 }
@@ -175,7 +175,7 @@ cDockingManager::UnregisterTab( RTab* iTab )
 
 
 void
-cDockingManager::TabLifted( RTab* iTab )
+FDockingManager::TabLifted( RTab* iTab )
 {
     // Processing directly after the signal was emitted
 
@@ -192,7 +192,7 @@ cDockingManager::TabLifted( RTab* iTab )
 
 
 void
-cDockingManager::TabDropped( RTab* iTab )
+FDockingManager::TabDropped( RTab* iTab )
 {
     assert( iTab == mCurrentDraggingTab );
     mCurrentDraggingTab->removeEventFilter( this );
@@ -218,7 +218,7 @@ cDockingManager::TabDropped( RTab* iTab )
 
 
 bool
-cDockingManager::eventFilter( QObject* obj, QEvent* event )
+FDockingManager::eventFilter( QObject* obj, QEvent* event )
 {
     // We process only mouse events of the current dragging tab.
     {
@@ -273,7 +273,7 @@ cDockingManager::eventFilter( QObject* obj, QEvent* event )
     // Selecting target area
     RTabArea* resultArea = NULL;
 
-    QVector< cElligibleArea > elligibleVector;
+    QVector< FElligibleArea > elligibleVector;
     for( RTabArea* area : mTabAreaList )
     {
         // Reset tabAreas hooks before processing the new one
@@ -297,7 +297,7 @@ cDockingManager::eventFilter( QObject* obj, QEvent* event )
         }
 
         // If we arrive here, the tabArea is elligible so we push it for further processing
-        elligibleVector.push_back( cElligibleArea( { area, region } ) );
+        elligibleVector.push_back( FElligibleArea( { area, region } ) );
     }
 
     switch( elligibleVector.count() )
@@ -317,9 +317,9 @@ cDockingManager::eventFilter( QObject* obj, QEvent* event )
         default:
         {
             // The current dragging tab is overlapping more than one area
-            QVector< cElligibleArea > overlappingCursorSelection;
+            QVector< FElligibleArea > overlappingCursorSelection;
             bool therAreOverlaping = false;
-            for( cElligibleArea m  : elligibleVector )
+            for( FElligibleArea m  : elligibleVector )
             {
                 // We chose the ones that contains the mouse cursor position
                 if( m.mRegion.contains( cpos ) )
@@ -332,9 +332,9 @@ cDockingManager::eventFilter( QObject* obj, QEvent* event )
             if( therAreOverlaping )
             {
                 // If there is at least one region that contains the cursor position, we select the topmost in overlappingCursorSelection
-                QVector< cHWNDZOrderingPair > orderingVector;
-                for( cElligibleArea m  : overlappingCursorSelection )
-                    orderingVector.append( cHWNDZOrderingPair{ GetZOrder( (HWND)m.mArea->topLevelWidget()->winId() ), m.mArea } );
+                QVector< FZOrderingPair > orderingVector;
+                for( FElligibleArea m  : overlappingCursorSelection )
+                    orderingVector.append( FZOrderingPair{ GetZOrder( (HWND)m.mArea->topLevelWidget()->winId() ), m.mArea } );
 
                 qSort( orderingVector.begin(), orderingVector.end(), SortZ );
                 resultArea = orderingVector[0].area;
@@ -342,9 +342,9 @@ cDockingManager::eventFilter( QObject* obj, QEvent* event )
             else
             {
                 // Otherwise: overlapping more than one area but cursor is not in any of them, we select the topmost in elligible
-                QVector< cHWNDZOrderingPair > orderingVector;
-                for( cElligibleArea m  : elligibleVector )
-                    orderingVector.append( cHWNDZOrderingPair{ GetZOrder( (HWND)m.mArea->topLevelWidget()->winId() ), m.mArea } );
+                QVector< FZOrderingPair > orderingVector;
+                for( FElligibleArea m  : elligibleVector )
+                    orderingVector.append( FZOrderingPair{ GetZOrder( (HWND)m.mArea->topLevelWidget()->winId() ), m.mArea } );
                 qSort( orderingVector.begin(), orderingVector.end(), SortZ );
                 resultArea = orderingVector[0].area;
             }
@@ -383,7 +383,7 @@ cDockingManager::eventFilter( QObject* obj, QEvent* event )
 
 
 void
-cDockingManager::InitConnectionsForTab( RTab* iTab )
+FDockingManager::InitConnectionsForTab( RTab* iTab )
 {
     QObject::connect( iTab, SIGNAL( Lifted( RTab* ) ), this, SLOT( TabLifted( RTab* ) ) );
     QObject::connect( iTab, SIGNAL( Dropped( RTab* ) ), this, SLOT( TabDropped( RTab* ) ) );
@@ -391,7 +391,7 @@ cDockingManager::InitConnectionsForTab( RTab* iTab )
 
 
 void
-cDockingManager::DestroyConnectionsForTab( RTab* iTab )
+FDockingManager::DestroyConnectionsForTab( RTab* iTab )
 {
     QObject::disconnect( iTab, SIGNAL( Lifted( RTab* ) ), this, SLOT( TabLifted( RTab* ) ) );
     QObject::disconnect( iTab, SIGNAL( Dropped( RTab* ) ), this, SLOT( TabDropped( RTab* ) ) );
@@ -409,10 +409,10 @@ cDockingManager::DestroyConnectionsForTab( RTab* iTab )
 //---------------------------------------------- External Conveniency Singleton Accessor
 
 
-::Rivet::__private__::cDockingManager*
+::Rivet::__private__::FDockingManager*
 DockingManager()
 {
-    return  ::Rivet::__private__::cDockingManager::DockingManager();
+    return  ::Rivet::__private__::FDockingManager::DockingManager();
 }
 
 
