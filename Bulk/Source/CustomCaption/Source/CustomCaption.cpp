@@ -15,7 +15,7 @@
 
 
 #include <RivetCustomMainWindow>
-#include <RivetRCustomCaption>
+#include <RivetCustomCaption>
 
 
 class  cMyRCustomCaption :

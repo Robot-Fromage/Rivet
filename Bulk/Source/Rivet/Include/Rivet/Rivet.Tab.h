@@ -51,6 +51,7 @@ class  RTab
     typedef  RTab       tSelf;
     typedef  QWidget    tSuperClass;
 
+
 ////////////////////////////////////////////////////////////////////////////////////////
 ////                                PUBLIC API                                      ////
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -67,11 +68,13 @@ enum class eTabShape
     kRect_Line, ///< RectLine, The tab has hybrid shape rect line
 };
 
+
 public:
 //--------------------------------------------------------------------------------------
 //----------------------------------------------------------- Construction / Destruction
     virtual  ~RTab();
     RTab( QWidget* iParent = nullptr );
+
 
 public:
 //--------------------------------------------------------------------------------------
@@ -81,12 +84,14 @@ public:
     const  QPoint&  DragShift()  const;
     void            FinishDrag();
 
+
 public:
 //--------------------------------------------------------------------------------------
 //------------------------------------------------------------------ Animation Interface
     void            SetAnimatedMovement( const  QPoint& iDest );
     void            StopAnimatedMovement();
     const  QRect&   TargetGeometry()  const;
+
 
 public:
 //--------------------------------------------------------------------------------------
@@ -101,6 +106,7 @@ public:
     const  QColor&  GetColor()  const;
     const  QColor&  GetFadeColor()  const;
 
+
 public:
 //--------------------------------------------------------------------------------------
 //------------------------------------------------------------------ Tab State accessors
@@ -108,6 +114,7 @@ public:
     bool            IsHovered()  const;
     bool            IsPressed()  const;
     bool            IsActive()  const;
+
 
 public:
 //--------------------------------------------------------------------------------------
@@ -117,11 +124,13 @@ public:
     bool            IsLiftable()  const;
     bool            IsClosable()  const;
 
+
 public:
 //--------------------------------------------------------------------------------------
 //--------------------------------------------------------------------- ID tag Interface
     void             SetTag( const  QString&  iTag );
     const  QString&  GetTag()  const;
+
 
 public:
 //--------------------------------------------------------------------------------------
@@ -129,17 +138,20 @@ public:
     void                SetOnTabDroppedOutCB( OnTabDroppedOutCB iOnTabDroppedOutCB );
     OnTabDroppedOutCB   GetOnTabDroppedOutCB()  const;
 
+
 public:
 //--------------------------------------------------------------------------------------
 //---------------------------------------------------------------------- Link widget API
     void                SetLinkWidget( QWidget* iWidget );
     QWidget*            GetLinkWidget()  const;
 
+
 ////////////////////////////////////////////////////////////////////////////////////////
 ////                                PRIVATE API                                     ////
 ////////////////////////////////////////////////////////////////////////////////////////
 private:
-    // Qt Events overrides
+//--------------------------------------------------------------------------------------
+//------------------------------------------------------------------ Qt Events overrides
     virtual  void   resizeEvent(        QResizeEvent*   event )     override;
     virtual  void   enterEvent(         QEvent*         event )     override;
     virtual  void   leaveEvent(         QEvent*         event )     override;
@@ -149,19 +161,25 @@ private:
     virtual  void   paintEvent(         QPaintEvent*    event )     override;
     virtual  void   closeEvent(         QCloseEvent*    event )     override;
 
+
 private:
-    // Private GUI Processing Functions
+//--------------------------------------------------------------------------------------
+//----------------------------------------------------- Private GUI Processing Functions
     void            Init();
     void            Build();
     void            Compose();
     void            Destroy();
 
-private:
-    // Internal Tab Utilities on Compose
-    void            CheckTitleEllipsis();
 
 private:
-    // Docking Manager Registering API
+//--------------------------------------------------------------------------------------
+//---------------------------------------------------- Internal Tab Utilities on Compose
+    void            CheckTitleEllipsis();
+
+
+private:
+//--------------------------------------------------------------------------------------
+//------------------------------------------------------ Docking Manager Registering API
     void            Register();
     void            Unregister();
 
@@ -170,11 +188,13 @@ private:
 ////                              SIGNAL SLOTS API                                  ////
 ////////////////////////////////////////////////////////////////////////////////////////
 public slots:
-    // Tab Slots
+//--------------------------------------------------------------------------------------
+//---------------------------------------------------------------------------- Tab Slots
     void  ProcessCloseClicked();
 
 signals:
-    // Docking Interface Signals
+//--------------------------------------------------------------------------------------
+//------------------------------------------------------------ Docking Interface Signals
     void  Lifted( RTab* );
     void  Dropped( RTab* );
     void  Selected( RTab* );
