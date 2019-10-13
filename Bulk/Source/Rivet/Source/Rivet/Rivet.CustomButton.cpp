@@ -31,8 +31,8 @@ RCustomButton::~RCustomButton()
 }
 
 
-RCustomButton::RCustomButton(QWidget *parent)
-    : tSuperClass(              parent                              )
+RCustomButton::RCustomButton( QWidget* iParent )
+    : tSuperClass(              iParent                             )
     , mHovered(                 false                               )
     , mPressed(                 false                               )
     , mBgColor(                 DEFAULT_BG_COLOR                    )

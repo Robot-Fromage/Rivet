@@ -80,7 +80,7 @@ public:
     /// @fn         RCustomButton( QWidget *parent = nullptr )
     /// @brief      Default Constructor.
     /// @details    Init member data with default values.
-    RCustomButton( QWidget *parent = nullptr );
+    RCustomButton( QWidget* iParent = nullptr );
 
 public:
 //--------------------------------------------------------------------------------------

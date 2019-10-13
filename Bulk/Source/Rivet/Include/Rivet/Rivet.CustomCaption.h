@@ -42,7 +42,7 @@ public:
     /// @fn         RCustomCaption( QWidget *parent = nullptr )
     /// @brief      Default Constructor.
     /// @details    Init member data with default values.
-    RCustomCaption( QWidget* parent = nullptr );
+    RCustomCaption( QWidget* iParent = nullptr );
 
 
 public:

@@ -18,7 +18,7 @@
 #include <QTextEdit>
 
 #include <RivetCustomMainWindow>
-#include <RivetDefaultCaption>
+#include <RivetRDefaultCaption>
 #include <RivetTabArea>
 #include <RivetDockingManager>
 #include <RivetDockingCallbackLibrary>
@@ -28,9 +28,9 @@ void  OnTabDroppedOutCB_OpenCustom( ::Rivet::Tab* iTab, ::Rivet::TabArea* iSrc )
 
 
 class  cBrowserCaption :
-    public  ::Rivet::DefaultCaption
+    public  ::Rivet::RDefaultCaption
 {
-    typedef  ::Rivet::DefaultCaption  tSuperClass;
+    typedef  ::Rivet::RDefaultCaption  tSuperClass;
 
 public:
     virtual  ~cBrowserCaption() {

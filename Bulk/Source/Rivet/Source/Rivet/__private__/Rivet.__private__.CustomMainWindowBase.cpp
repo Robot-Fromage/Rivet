@@ -31,8 +31,8 @@ RCustomMainWindowBase::~RCustomMainWindowBase()
 }
 
 
-RCustomMainWindowBase::RCustomMainWindowBase( QWidget *parent )
-    : tSuperClass(              parent                  )
+RCustomMainWindowBase::RCustomMainWindowBase( QWidget* iParent )
+    : tSuperClass(              iParent                 )
     , mCaptionHeight(           DEFAULT_CAPTION_HEIGHT  )
     , mPaddings(                DEFAULT_PADDINGS        )
     , mRestoreGeometry(         QRect()                 )

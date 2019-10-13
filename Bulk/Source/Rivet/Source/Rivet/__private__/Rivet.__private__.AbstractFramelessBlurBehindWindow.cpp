@@ -30,8 +30,8 @@ IFramelessTranslucentBlurBehindWindow::~IFramelessTranslucentBlurBehindWindow()
 }
 
 
-IFramelessTranslucentBlurBehindWindow::IFramelessTranslucentBlurBehindWindow( QWidget* parent )
-    : tSuperClass(  parent                  )
+IFramelessTranslucentBlurBehindWindow::IFramelessTranslucentBlurBehindWindow( QWidget* iParent )
+    : tSuperClass(  iParent                 )
     , mBorderWidth( DEFAULT_BORDER_WIDTH    )
 {
     // The functions are called in this order, and this is important.

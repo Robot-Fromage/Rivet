@@ -1,47 +1,58 @@
-/*************************************************************************
+/**
 *
 *   Rivet
 *__________________
 *
-* Rivet.DefaultCaption.h
-* 9-9-2018 18:56 GMT+1
-* Clement Berthaud - Layl
-* Please refer to LICENSE.TXT
+* @file     Rivet.DefaultCaption.h
+* @author   Clement Berthaud
+* @brief    This file profides the declaration for the RDefaultCaption class.
 */
-
 #pragma once
-
-
-#include <QObject>
-
-
 #include "Rivet/Rivet.CustomCaption.h"
 #include "Rivet/Rivet.CustomButton.h"
+#include <QObject>
 
-
-namespace  Rivet
+namespace  Rivet {
+/////////////////////////////////////////////////////
+/// @class      RDefaultCaption
+/// @brief      The RDefaultCaption class provides a default custom caption widget.
+/// @details    It provides window snap / close / minimize / maximize mechanisms and buttons.
+class  RDefaultCaption
+    : public  RCustomCaption
 {
-
-
-class  DefaultCaption :
-    public  RCustomCaption
-{
-
     Q_OBJECT
 
-    typedef  RCustomCaption  tSuperClass;
+private:
+//--------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------- Typedefs
+    typedef  RDefaultCaption    tSelf;
+    typedef  RCustomCaption     tSuperClass;
+
 
 public:
-    // Construction / Destruction
-    virtual  ~DefaultCaption();
-    DefaultCaption( QWidget* parent = Q_NULLPTR );
+//--------------------------------------------------------------------------------------
+//----------------------------------------------------------- Construction / Destruction
+    /// @fn         virtual  ~RDefaultCaption()
+    /// @brief      Default Destructor.
+    /// @details    virtual, does nothing.
+    virtual  ~RDefaultCaption();
+
+
+    /// @fn         RDefaultCaption( QWidget* iParent = nullptr )
+    /// @brief      Default Constructor.
+    /// @details    Init data members.
+    RDefaultCaption( QWidget* iParent = nullptr );
+
 
 public:
-    // Geometry public API
+//--------------------------------------------------------------------------------------
+//------------------------------------------------------------------ Public Geometry API
     QRect  ButtonsGeometry();
 
+
 public:
-    // Public customization utilities
+//--------------------------------------------------------------------------------------
+//------------------------------------------------------- Public customization utilities
     void  ActiveBackgroundColor( const  QColor& iColor );
     const  QColor&  ActiveBackgroundColor();
     void  InactiveBackgroundColor( const  QColor& iColor );
@@ -49,28 +60,51 @@ public:
     void  SetBlackControls();
     void  SetWhiteControls();
 
+
 protected:
-    // Protected Qt event overrides
+//--------------------------------------------------------------------------------------
+//--------------------------------------------------------- Protected Qt events override
     virtual  void  paintEvent(  QPaintEvent*    event )     override;
     virtual  void  resizeEvent( QResizeEvent*   event )     override;
 
-private:
-    // GUI utilities
-private: void  Init();
-private: void  Build();
-protected: virtual  void  Compose();
-private: void  Destroy();
 
 private:
-    // Private Data Members
-    RCustomButton*  mCloseButton;
-    RCustomButton*  mMaximizeButton;
-    RCustomButton*  mMinimizeButton;
+//--------------------------------------------------------------------------------------
+//-------------------------------------------------------------- Internal GUI management
+    /// @fn         void  Init()
+    /// @brief      Init GUI members.
+    /// @details    Called only once by constructor.
+    void  Init();
 
-    QColor  mActiveBackgroundColor;
-    QColor  mInactiveBackgroundColor;
+    /// @fn         void  Build()
+    /// @brief      Setup GUI members flags, styles, properties.
+    /// @details    Called only once by constructor.
+    void  Build();
+
+
+    /// @fn         void  Compose()
+    /// @brief      Compose geometry of members in GUI.
+    /// @details    Called repeatedly on resize or recompose.
+    void  Compose();
+
+
+    /// @fn         void  Destroy()
+    /// @brief      Delete GUI members.
+    /// @details    Called only once by destructor.
+    void  Destroy();
+
+
+private:
+//--------------------------------------------------------------------------------------
+//----------------------------------------------------------------- Private Data Members
+    RCustomButton*  mCloseButton;       ///< The close button.
+    RCustomButton*  mMaximizeButton;    ///< The maximize button.
+    RCustomButton*  mMinimizeButton;    ///< The minimize button.
+    QColor  mActiveBackgroundColor;     ///< The active caption color.
+    QColor  mInactiveBackgroundColor;   ///< The inactive caption color.
+
+
 };
-
 
 } // namespace  Rivet
 

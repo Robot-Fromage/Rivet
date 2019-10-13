@@ -40,10 +40,10 @@ public:
     virtual  ~RCustomMainWindowBase();
 
 
-    /// @fn         RCustomMainWindowBase( QWidget* parent = nullptr )
+    /// @fn         RCustomMainWindowBase( QWidget* iParent = nullptr )
     /// @brief      Default Constructor.
     /// @details    Init member data.
-    RCustomMainWindowBase( QWidget* parent = nullptr );
+    RCustomMainWindowBase( QWidget* iParent = nullptr );
 
 
 public:

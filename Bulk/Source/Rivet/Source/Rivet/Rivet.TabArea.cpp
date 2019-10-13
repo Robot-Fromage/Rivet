@@ -143,8 +143,8 @@ TabArea::~TabArea()
 }
 
 
-TabArea::TabArea( QWidget *parent ) :
-    tSuperClass( parent ),
+TabArea::TabArea( QWidget* iParent ) :
+    tSuperClass( iParent ),
     mDomesticTabs( QVector< Tab* >() ),
 
     mScrollArea(            NULL ),

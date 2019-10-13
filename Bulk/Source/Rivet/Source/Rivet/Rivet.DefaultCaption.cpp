@@ -1,48 +1,38 @@
-/*************************************************************************
+/**
 *
 *   Rivet
 *__________________
 *
-* Rivet.DefaultCaption.cpp
-* 9-9-2018 18:57 GMT+1
-* Clement Berthaud - Layl
-* Please refer to LICENSE.TXT
+* @file     Rivet.DefaultCaption.cpp
+* @author   Clement Berthaud
+* @brief    This file profides the definition for the RDefaultCaption class.
 */
-
 #include "Rivet/Rivet.DefaultCaption.h"
-
-
 #include <QPainter>
 
-
-namespace  Rivet
-{
-
-
+namespace  Rivet {
 //--------------------------------------------------------------------------------------
 //--------------------------------------------------------------- Default values defines
-
-
-#define  DEFAULT_ACTIVE_BACKGROUND_COLOR QColor( 0, 0, 0, 127 )
-#define  DEFAULT_INACTIVE_BACKGROUND_COLOR QColor( 0, 0, 0, 50 )
+#define     DEFAULT_ACTIVE_BACKGROUND_COLOR     QColor( 0, 0, 0, 127 )
+#define     DEFAULT_INACTIVE_BACKGROUND_COLOR   QColor( 0, 0, 0, 50 )
 
 
 //--------------------------------------------------------------------------------------
 //----------------------------------------------------------- Construction / Destruction
 
 
-DefaultCaption::~DefaultCaption()
+RDefaultCaption::~RDefaultCaption()
 {
     Destroy();
 }
 
-DefaultCaption::DefaultCaption( QWidget* parent ) :
-    tSuperClass( parent ),
-    mCloseButton(       NULL ),
-    mMaximizeButton(    NULL ),
-    mMinimizeButton(    NULL ),
-    mActiveBackgroundColor( DEFAULT_ACTIVE_BACKGROUND_COLOR ),
-    mInactiveBackgroundColor( DEFAULT_INACTIVE_BACKGROUND_COLOR )
+RDefaultCaption::RDefaultCaption( QWidget* iParent )
+    : tSuperClass(              iParent                             )
+    , mCloseButton(             nullptr                             )
+    , mMaximizeButton(          nullptr                             )
+    , mMinimizeButton(          nullptr                             )
+    , mActiveBackgroundColor(   DEFAULT_ACTIVE_BACKGROUND_COLOR     )
+    , mInactiveBackgroundColor( DEFAULT_INACTIVE_BACKGROUND_COLOR   )
 {
     Init();
     Build();
@@ -51,11 +41,9 @@ DefaultCaption::DefaultCaption( QWidget* parent ) :
 
 
 //--------------------------------------------------------------------------------------
-//------------------------------------------------------------------ Geometry public API
-
-
+//------------------------------------------------------------------ Public Geometry API
 QRect
-DefaultCaption::ButtonsGeometry()
+RDefaultCaption::ButtonsGeometry()
 {
     return  QRect( mMinimizeButton->x(), 0, width() - mMinimizeButton->x(), height() );
 }
@@ -63,37 +51,35 @@ DefaultCaption::ButtonsGeometry()
 
 //--------------------------------------------------------------------------------------
 //------------------------------------------------------- Public customization utilities
-
-
 void
-DefaultCaption::ActiveBackgroundColor( const  QColor& iColor )
+RDefaultCaption::ActiveBackgroundColor( const  QColor& iColor )
 {
     mActiveBackgroundColor = iColor;
 }
 
 
 const  QColor&
-DefaultCaption::ActiveBackgroundColor()
+RDefaultCaption::ActiveBackgroundColor()
 {
     return  mActiveBackgroundColor;
 }
 
 void
-DefaultCaption::InactiveBackgroundColor( const  QColor& iColor )
+RDefaultCaption::InactiveBackgroundColor( const  QColor& iColor )
 {
     mInactiveBackgroundColor = iColor;
 }
 
 
 const  QColor&
-DefaultCaption::InactiveBackgroundColor()
+RDefaultCaption::InactiveBackgroundColor()
 {
     return  mInactiveBackgroundColor;
 }
 
 
 void
-DefaultCaption::SetBlackControls()
+RDefaultCaption::SetBlackControls()
 {
     QColor black = Qt::black;
     mCloseButton->SetColor( black );
@@ -111,7 +97,7 @@ DefaultCaption::SetBlackControls()
 
 
 void
-DefaultCaption::SetWhiteControls()
+RDefaultCaption::SetWhiteControls()
 {
     QColor white = Qt::white;
     mCloseButton->SetColor( white );
@@ -130,10 +116,8 @@ DefaultCaption::SetWhiteControls()
 
 //--------------------------------------------------------------------------------------
 //--------------------------------------------------------- Protected Qt event overrides
-
-
 void
-DefaultCaption::paintEvent(  QPaintEvent*    event )
+RDefaultCaption::paintEvent(  QPaintEvent*    event )
 {
     QPainter painter(this);
     painter.setRenderHint( QPainter::Antialiasing, false );
@@ -144,12 +128,11 @@ DefaultCaption::paintEvent(  QPaintEvent*    event )
     painter.setBrush( bgColor );
     painter.setPen( Qt::NoPen );
     painter.drawRect( 0, 0, w, h );
-
 }
 
 
 void
-DefaultCaption::resizeEvent( QResizeEvent *event )
+RDefaultCaption::resizeEvent( QResizeEvent *event )
 {
     QWidget::resizeEvent(event);
     Compose();
@@ -158,10 +141,8 @@ DefaultCaption::resizeEvent( QResizeEvent *event )
 
 //--------------------------------------------------------------------------------------
 //------------------------------------------------------------------------ GUI utilities
-
-
 void
-DefaultCaption::Init()
+RDefaultCaption::Init()
 {
     if( !mCloseButton )     mCloseButton    = new  RCustomButton( this );
     if( !mMaximizeButton )  mMaximizeButton = new  RCustomButton( this );
@@ -170,7 +151,7 @@ DefaultCaption::Init()
 
 
 void
-DefaultCaption::Build()
+RDefaultCaption::Build()
 {
     mCloseButton->SetIconShape( RCustomButton::eButtonIconShape::kClose );
     mMaximizeButton->SetIconShape( RCustomButton::eButtonIconShape::kMaximize );
@@ -185,7 +166,7 @@ DefaultCaption::Build()
 
 
 void
-DefaultCaption::Compose()
+RDefaultCaption::Compose()
 {
     int w = width();
     int h = height();
@@ -207,7 +188,7 @@ DefaultCaption::Compose()
 
 
 void
-DefaultCaption::Destroy()
+RDefaultCaption::Destroy()
 {
     delete  mCloseButton;
     delete  mMaximizeButton;

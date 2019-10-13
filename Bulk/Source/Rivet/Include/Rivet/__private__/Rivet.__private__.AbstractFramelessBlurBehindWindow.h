@@ -44,7 +44,7 @@ public:
     /// @brief      Default Constructor.
     /// @details    Set default attributes and flags and inits system calls with \e InitNativeFrameless.
     ///             BlurBehind is disabled by default.
-    IFramelessTranslucentBlurBehindWindow( QWidget*  parent = nullptr );
+    IFramelessTranslucentBlurBehindWindow( QWidget* iParent = nullptr );
 
 
 protected:

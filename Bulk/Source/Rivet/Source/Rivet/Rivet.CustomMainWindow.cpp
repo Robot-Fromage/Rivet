@@ -23,8 +23,8 @@ RCustomMainWindow::~RCustomMainWindow()
 }
 
 
-RCustomMainWindow::RCustomMainWindow( QWidget *parent )
-    : tSuperClass(      parent  )
+RCustomMainWindow::RCustomMainWindow( QWidget* iParent )
+    : tSuperClass(      iParent )
     , mCaptionWidget(   nullptr )
     , mCenterWidget(    nullptr )
 {

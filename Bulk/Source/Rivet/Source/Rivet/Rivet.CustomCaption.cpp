@@ -18,8 +18,8 @@ RCustomCaption::~RCustomCaption()
 }
 
 
-RCustomCaption::RCustomCaption( QWidget* parent )
-    : tSuperClass( parent )
+RCustomCaption::RCustomCaption( QWidget* iParent )
+    : tSuperClass( iParent )
 {
 }
 

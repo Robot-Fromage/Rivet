@@ -33,8 +33,16 @@ private:
 public:
 //--------------------------------------------------------------------------------------
 //----------------------------------------------------------- Construction / Destruction
+    /// @fn         virtual  ~RCustomMainWindow()
+    /// @brief      Default Destructor.
+    /// @details    virtual, does nothing.
     virtual  ~RCustomMainWindow();
-    RCustomMainWindow( QWidget* parent = nullptr );
+
+
+    /// @fn         RCustomMainWindow( QWidget* iParent = nullptr )
+    /// @brief      Default Constructor.
+    /// @details    Init data members.
+    RCustomMainWindow( QWidget* iParent = nullptr );
 
 
 public:
